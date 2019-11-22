@@ -46,14 +46,16 @@
 				// 	_list.push(p);
 				// }, 2000)
 				// =============
-				var _data={};
+				var _data = {};
 				_data["fun"] = function(res) {
 					var _list = that.list;
 					console.log(res)
 					let p = {
-						"name":res.data
+						"name": res.data
 					}
-					_list.push(p);
+					setTimeout(() => {
+						_list.push(p);
+					}, 2500)
 				}
 				that.$store.dispatch("onSocketMessage", _data)
 			}
