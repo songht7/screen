@@ -73,7 +73,8 @@
     },
     "h5" : {
         "router" : {
-            "base" : "/leon/meeting/"
-        }
+            "base" : "/leon/screen/"
+        },
+        "title" : "screen"
     }
 }
