@@ -25,10 +25,16 @@
 		},
 		onShow() {
 			var that = this;
+			uni.onSocketOpen(function(res) {
+				console.log('WebSocket连接已打开！');
+			});
 			that.getList();
 		},
 		onHide() {
-			//that.$store.dispatch("connectSocket", "?m=socketStop")
+			this.$store.dispatch("closeSocket")
+		},
+		onUnload() {
+			this.$store.dispatch("closeSocket")
 		},
 		components: {
 			cView
