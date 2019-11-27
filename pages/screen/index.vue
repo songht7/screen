@@ -24,7 +24,7 @@
 				loop: true,
 				muted: true,
 				bubble: "./static/bubble.svg",
-				bgIs: "img",
+				bgIs: "video",
 				list: []
 			}
 		},
