@@ -1,10 +1,17 @@
 <template>
 	<view class="content">
-		<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" src="/static/video.mp4">
+		<block v-if="bgIs=='video'">
+			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" src="/static/video.mp4">
+				<block v-for="(obj,k) in list" :key="k">
+					<cView :list="obj" :bubble="bubble"></cView>
+				</block>
+			</video>
+		</block>
+		<block else>
 			<block v-for="(obj,k) in list" :key="k">
 				<cView :list="obj" :bubble="bubble"></cView>
 			</block>
-		</video>
+		</block>
 	</view>
 </template>
 
@@ -17,6 +24,7 @@
 				loop: true,
 				muted: true,
 				bubble: "./static/bubble.svg",
+				bgIs: "img",
 				list: []
 			}
 		},
@@ -78,6 +86,8 @@
 	.content {
 		width: 100%;
 		height: 100%;
+		background: url(../../static/bg-scren.jpg) no-repeat 50% 50% #152152;
+		background-size: contain;
 	}
 
 	#MeetVideo {
