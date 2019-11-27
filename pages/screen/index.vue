@@ -31,10 +31,10 @@
 			that.getList();
 		},
 		onHide() {
-			this.$store.dispatch("closeSocket")
+			this.sendSocketMessage('space_close')
 		},
 		onUnload() {
-			this.$store.dispatch("closeSocket")
+			this.sendSocketMessage('space_close')
 		},
 		components: {
 			cView
@@ -54,16 +54,34 @@
 				// =============
 				var _data = {};
 				_data["fun"] = function(res) {
-					var _list = that.list;
 					console.log(res)
-					let p = {
-						"name": res.data
+					if (res.data != 'space_close') {
+						var _list = that.list;
+						let p = {
+							"name": res.data
+						}
+						setTimeout(() => {
+							_list.push(p);
+						}, 2500)
 					}
-					setTimeout(() => {
-						_list.push(p);
-					}, 2500)
 				}
 				that.$store.dispatch("onSocketMessage", _data)
+			},
+			sendSocketMessage(val) {
+				var that = this;
+				that.up = true;
+				that.paused = "running";
+				let _data = {
+					"msg": val
+				};
+				_data["fun"] = function() {
+					setTimeout(() => {
+						that.up = false;
+						that.paused = "paused";
+					}, 3000)
+				}
+				console.log(_data);
+				that.$store.dispatch("sendSocketMessage", _data)
 			}
 		}
 	}
