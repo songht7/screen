@@ -1,7 +1,7 @@
 <template>
-	<cover-view :class="['coverView',shine>50?'shine big':'']" :style="{'left':setPosition}">
+	<cover-view :class="['coverView',shine>50?'shine big':'',shaneType]" :style="{'left':setPosition,'bottom':shaneType=='floating'?setPosition:'2%'}">
 		<view class="cover-block">
-			<!-- <img :src="bubble" class="bubble" /> -->
+			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view class="cover-name">
 				{{list.name}}
 			</view>
@@ -19,9 +19,17 @@
 					return {}
 				}
 			},
+			shaneType: {
+				type: String,
+				default: ""
+			},
 			bubble: {
 				type: String,
 				default: ""
+			},
+			bubbleShow: {
+				type: Boolean,
+				default: false
 			}
 		},
 		data() {
@@ -52,12 +60,23 @@
 		overflow: initial;
 		bottom: 2%;
 		opacity: 0.5;
+	}
+
+	.fadeUpOut {
 		animation-name: fadeUpOut;
 		animation-duration: 15s;
 		animation-timing-function: linear;
 		animation-iteration-count: 1;
 		animation-fill-mode: forwards;
 		/* animation-play-state: paused; */
+	}
+
+	.floating {
+		animation-name: floating;
+		animation-duration: 3s;
+		animation-iteration-count: infinite;
+		animation-fill-mode: none;
+		animation-direction: alternate;
 	}
 
 	.big {
@@ -122,6 +141,20 @@
 		}
 	}
 
+	@keyframes floating {
+		0% {
+			opacity: 0.6;
+		}
+
+		50% {
+			opacity: 0.8;
+		}
+
+		100% {
+			opacity: 1;
+		}
+	}
+
 	@keyframes shine {
 		from {
 			opacity: 0.1;
@@ -163,25 +196,25 @@
 
 	@keyframes flash {
 		from {
-			text-shadow: 0 0 10px #fff,
-               0 0 20px  #fff,
-               0 0 30px  #fff,
-               0 0 40px  #228DFF,
-               0 0 70px  #228DFF,
-               0 0 80px  #228DFF,
-               0 0 100px #228DFF,
-               0 0 150px #228DFF;
+			text-shadow: 0 0 5px #fff,
+				0 0 10px #fff,
+				0 0 15px #fff,
+				0 0 20px #228DFF,
+				0 0 35px #228DFF,
+				0 0 40px #228DFF,
+				0 0 50px #228DFF,
+				0 0 75px #228DFF;
 		}
 
 		to {
-			text-shadow:  0 0 5px #fff,
-               0 0 10px #fff,
-               0 0 15px #fff,
-               0 0 20px #228DFF,
-               0 0 35px #228DFF,
-               0 0 40px #228DFF,
-               0 0 50px #228DFF,
-               0 0 75px #228DFF;
+			text-shadow: 0 0 10px #fff,
+				0 0 20px #fff,
+				0 0 30px #fff,
+				0 0 40px #228DFF,
+				0 0 70px #228DFF,
+				0 0 80px #228DFF,
+				0 0 100px #228DFF,
+				0 0 150px #228DFF;
 		}
 	}
 

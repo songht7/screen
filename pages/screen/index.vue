@@ -3,13 +3,13 @@
 		<block v-if="bgIs=='video'">
 			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" src="/static/video.mp4">
 				<block v-for="(obj,k) in list" :key="k">
-					<cView :list="obj" :bubble="bubble"></cView>
+					<cView :list="obj" :bubble="bubble" :shaneType="sType"></cView>
 				</block>
 			</video>
 		</block>
 		<block else>
 			<block v-for="(obj,k) in list" :key="k">
-				<cView :list="obj" :bubble="bubble"></cView>
+				<cView :list="obj" :bubble="bubble" :shaneType="sType"></cView>
 			</block>
 		</block>
 	</view>
@@ -24,7 +24,8 @@
 				loop: true,
 				muted: true,
 				bubble: "./static/bubble.svg",
-				bgIs: "video",
+				bgIs: "img",
+				sType: "floating",//fadeUpOut floating
 				list: []
 			}
 		},
@@ -51,14 +52,14 @@
 		methods: {
 			getList() {
 				var that = this;
-				// let si = setInterval(() => {
+				// let si = setTimeout(() => {
 				// 	var _list = that.list;
 				// 	//console.log(_left);
 				// 	let p = {
 				// 		"name": "赵钱孙"
 				// 	}
 				// 	_list.push(p);
-				// }, 2000)
+				// }, 1000)
 				// =============
 				var _data = {};
 				_data["fun"] = function(res) {
