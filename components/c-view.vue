@@ -1,8 +1,8 @@
 <template>
-	<cover-view :class="['coverView',shine>50?'shine big':'',shaneType]" :style="{'left':setPosition,'bottom':shaneType=='floating'?setPosition:'2%'}">
+	<cover-view :class="['coverView',shine>50?'shine big':'',shaneType]" :style="{'left':setPosition,'bottom':shaneType=='floating'?randomBottom:'2%'}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
-			<view class="cover-name">
+			<view :class="['cover-name',txtType]">
 				{{list.name}}
 			</view>
 		</view>
@@ -23,6 +23,10 @@
 				type: String,
 				default: ""
 			},
+			txtType: {
+				type: String,
+				default: "textFlash"
+			},
 			bubble: {
 				type: String,
 				default: ""
@@ -39,6 +43,11 @@
 		},
 		computed: {
 			setPosition() {
+				let random = Math.floor(Math.random() * (80 - 10) + 10);
+				//console.log("random:", random);
+				return random + "%";
+			},
+			randomBottom() {
 				let random = Math.floor(Math.random() * (80 - 10) + 10);
 				//console.log("random:", random);
 				return random + "%";
@@ -143,7 +152,7 @@
 
 	@keyframes floating {
 		0% {
-			opacity: 0.3;
+			opacity: 0.5;
 		}
 
 		50% {
@@ -186,39 +195,76 @@
 		flex-direction: row;
 		align-content: center;
 		align-items: center;
+	}
 
+	.floating .cover-name {
+		color: #CB937D;
+		background-image: -webkit-linear-gradient(left, #CBB281, #DB9824);
+		-webkit-text-fill-color: transparent;
+		-webkit-background-clip: text;
+		background-size: 100% 100%;
+	}
+
+	.textFlash {
 		animation-name: flash;
 		animation-duration: 1.5s;
 		animation-timing-function: ease-in-out;
 		animation-iteration-count: infinite;
 		animation-direction: alternate;
+		/* animation-play-state: paused; */
 	}
-	.floating .cover-name{
-		color: #FABC03;
+
+	.cover-name.gradual {
+		background-size: 200% 100%;
+		animation: masked-animation 4s infinite linear;
+		/* animation-play-state: paused; */
+	}
+
+	@keyframes masked-animation {
+		0% {
+			background-position: 0 0;
+		}
+
+		100% {
+			background-position: -100% 0;
+		}
 	}
 
 	@keyframes flash {
 		from {
-			text-shadow: 0 0 5px #fff,
-				0 0 10px #fff,
-				0 0 15px #fff,
-				0 0 20px #228DFF,
-				0 0 35px #228DFF,
-				0 0 40px #228DFF,
-				0 0 50px #228DFF,
-				0 0 75px #228DFF;
+			text-shadow: 0 0 5px #CBB281,
+				0 0 10px #CBB281,
+				0 0 35px #DB9824,
+				0 0 40px #DB9824;
 		}
 
 		to {
-			text-shadow: 0 0 10px #fff,
-				0 0 20px #fff,
-				0 0 30px #fff,
-				0 0 40px #228DFF,
-				0 0 70px #228DFF,
-				0 0 80px #228DFF,
-				0 0 100px #228DFF,
-				0 0 150px #228DFF;
+			text-shadow: 0 0 10px #CBB281,
+				0 0 20px #CBB281,
+				0 0 40px #DB9824,
+				0 0 70px #DB9824;
 		}
+		/* from {
+			text-shadow: 0 0 5px #CBB281,
+				0 0 10px #CBB281,
+				0 0 15px #CBB281,
+				0 0 20px #DB9824,
+				0 0 35px #DB9824,
+				0 0 40px #DB9824,
+				0 0 50px #DB9824,
+				0 0 75px #DB9824;
+		}
+		
+		to {
+			text-shadow: 0 0 10px #CBB281,
+				0 0 20px #CBB281,
+				0 0 30px #CBB281,
+				0 0 40px #DB9824,
+				0 0 70px #DB9824,
+				0 0 80px #DB9824,
+				0 0 100px #DB9824,
+				0 0 150px #DB9824;
+		} */
 	}
 
 	.bubble {

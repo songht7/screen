@@ -3,13 +3,19 @@
 		<block v-if="bgIs=='video'">
 			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
 				<block v-for="(obj,k) in list" :key="k">
-					<cView :list="obj" :bubble="bubble" :shaneType="sType"></cView>
+					<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 				</block>
+				<cover-view class="typeBox">
+					<view class="typeBtn" @click="test">测试</view>
+					<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
+					<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
+					<view class="typeBtn" @click="changeShaneType">切换</view>
+				</cover-view>
 			</video>
 		</block>
 		<block v-else>
 			<block v-for="(obj,k) in list" :key="k">
-				<cView :list="obj" :bubble="bubble" :shaneType="sType"></cView>
+				<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 			</block>
 		</block>
 	</view>
@@ -27,6 +33,7 @@
 				bubble: "./static/bubble.svg",
 				bgIs: "video",
 				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀
+				txtType: "gradual", //gradual 渐变 textFlash 发光
 				list: []
 			}
 		},
@@ -53,15 +60,6 @@
 		methods: {
 			getList() {
 				var that = this;
-				// let si = setTimeout(() => {
-				// 	var _list = that.list;
-				// 	//console.log(_left);
-				// 	let p = {
-				// 		"name": "赵钱孙"
-				// 	}
-				// 	_list.push(p);
-				// }, 1000)
-				// =============
 				var _data = {};
 				_data["fun"] = function(res) {
 					console.log(res)
@@ -92,6 +90,21 @@
 				}
 				console.log(_data);
 				that.$store.dispatch("sendSocketMessage", _data)
+			},
+			changeShaneType() {
+				this.sType = this.sType == "floating" ? "fadeUpOut" : "floating";
+			},
+			test() {
+				var that = this;
+				var _list = that.list;
+				let p = {
+					"name": "测试字"
+				}
+				_list.push(p);
+			},
+			setTxtType(type) {
+				var that = this;
+				that.txtType = type;
 			}
 		}
 	}
@@ -114,5 +127,18 @@
 		width: 100%;
 		height: 100%;
 		position: relative;
+	}
+
+	.typeBox {
+		position: absolute;
+		z-index: 1;
+		right: 5%;
+		bottom: 5%;
+	}
+
+	.typeBtn {
+		color: #FFFFFF;
+		font-size: 12upx;
+		line-height: 1.4;
 	}
 </style>
