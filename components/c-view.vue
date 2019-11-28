@@ -175,7 +175,7 @@
 	.cover-name {
 		color: #FFF;
 		z-index: 2;
-		font-size: 28upx;
+		font-size: 24upx;
 		position: absolute;
 		top: 0;
 		line-height: 1;
