@@ -143,7 +143,7 @@
 
 	@keyframes floating {
 		0% {
-			opacity: 0.6;
+			opacity: 0.3;
 		}
 
 		50% {
@@ -192,6 +192,9 @@
 		animation-timing-function: ease-in-out;
 		animation-iteration-count: infinite;
 		animation-direction: alternate;
+	}
+	.floating .cover-name{
+		color: #FABC03;
 	}
 
 	@keyframes flash {

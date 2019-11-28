@@ -1,13 +1,13 @@
 <template>
 	<view class="content">
 		<block v-if="bgIs=='video'">
-			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" src="/static/video.mp4">
+			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
 				<block v-for="(obj,k) in list" :key="k">
 					<cView :list="obj" :bubble="bubble" :shaneType="sType"></cView>
 				</block>
 			</video>
 		</block>
-		<block else>
+		<block v-else>
 			<block v-for="(obj,k) in list" :key="k">
 				<cView :list="obj" :bubble="bubble" :shaneType="sType"></cView>
 			</block>
@@ -23,9 +23,10 @@
 				autoplay: true,
 				loop: true,
 				muted: true,
+				video: "/static/video.mp4",
 				bubble: "./static/bubble.svg",
-				bgIs: "img",
-				sType: "floating",//fadeUpOut floating
+				bgIs: "video",
+				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀
 				list: []
 			}
 		},
