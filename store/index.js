@@ -91,6 +91,10 @@ const store = new Vuex.Store({
 		},
 		onSocketMessage(ctx, parm) {
 			console.log(parm)
+			uni.onSocketError(function(res) {
+				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				console.log('WebSocket连接打开失败，请检查！');
+			});
 			uni.onSocketMessage(function(res) {
 				console.log('收到服务器内容：' + res);
 				if (parm.fun) {
