@@ -1,5 +1,5 @@
 <template>
-	<cover-view :class="['coverView',shine>50?'shine big':'',shaneType]" :style="{'left':setPosition,'bottom':shaneType=='floating'?randomBottom:'2%'}">
+	<cover-view :class="['coverView',shine>50?'shine big':'',shaneType]" :style="{'left':randomLeft,'bottom':shaneType=='floating'?randomBottom:'2%'}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view :class="['cover-name',txtType]">
@@ -42,13 +42,13 @@
 			};
 		},
 		computed: {
-			setPosition() {
+			randomLeft() {
 				let random = Math.floor(Math.random() * (80 - 10) + 10);
 				//console.log("random:", random);
 				return random + "%";
 			},
 			randomBottom() {
-				let random = Math.floor(Math.random() * (80 - 10) + 10);
+				let random = Math.floor(Math.random() * (70 - 10) + 10);
 				//console.log("random:", random);
 				return random + "%";
 			},
@@ -81,11 +81,13 @@
 	}
 
 	.floating {
+		opacity: 0;
 		animation-name: floating;
 		animation-duration: 3s;
-		animation-iteration-count: infinite;
+		animation-direction:alternate;
+		animation-timing-function: linear;
+		animation-iteration-count: 6;
 		animation-fill-mode: none;
-		animation-direction: alternate;
 	}
 
 	.big {
@@ -151,15 +153,10 @@
 	}
 
 	@keyframes floating {
-		0% {
-			opacity: 0.5;
+		from {
+			opacity: 0.1;
 		}
-
-		50% {
-			opacity: 0.8;
-		}
-
-		100% {
+		to {
 			opacity: 1;
 		}
 	}

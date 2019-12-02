@@ -33,7 +33,7 @@
 				bubble: "./static/bubble.svg",
 				bgIs: "video",
 				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀
-				txtType: "gradual", //gradual 渐变 textFlash 发光
+				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: []
 			}
 		},
