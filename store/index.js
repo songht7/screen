@@ -15,7 +15,8 @@ const store = new Vuex.Store({
 		data: {},
 		interface: common.Interface,
 		systemInfo: {},
-		socketOpen: false
+		socketOpen: false,
+		socketErr: ""
 	},
 	mutations: {
 		setSystemInfo(state, data) {
@@ -78,6 +79,7 @@ const store = new Vuex.Store({
 					ctx.state.socketOpen = true;
 				},
 				fail(err) {
+					ctx.state.socketErr = "同步连接异常，请刷新页面...";
 					console.log("connectSocket-fail：", err)
 					result = {
 						"success": false,

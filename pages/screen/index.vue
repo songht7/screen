@@ -10,6 +10,7 @@
 					<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
 					<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
 					<view class="typeBtn" @click="changeShaneType">切换</view>
+					<view class="typeBtn" v-if="$store.state.socketErr">{{$store.state.socketErr}}</view>
 				</cover-view>
 			</video>
 		</block>
@@ -37,11 +38,10 @@
 				list: []
 			}
 		},
-		onLoad() {
-			this.$store.dispatch("connectSocket")
-		},
+		onLoad() {},
 		onShow() {
 			var that = this;
+			this.$store.dispatch("connectSocket")
 			uni.onSocketOpen(function(res) {
 				console.log('WebSocket连接已打开！');
 			});
