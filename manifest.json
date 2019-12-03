@@ -73,7 +73,7 @@
     },
     "h5" : {
         "router" : {
-            "base" : "/leon/screen/"
+            "base" : ""
         },
         "title" : "screen"
     }
