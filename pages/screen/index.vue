@@ -6,16 +6,17 @@
 					<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 				</block>
 				<cover-view class="typeBox">
+					<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 					<text class="nav">—</text>
 					<block v-if="tstBtns">
 						<view class="typeBtn" @click="test">测试</view>
+						<view class="typeBtn" @click="reset">清空</view>
 						<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
 						<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
 						<view class="typeBtn" @click="changeShaneType">切换</view>
-						<view class="typeBtn" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 					</block>
-					<view class="typeBtn shakeSwitch" @click="shakeSwitch">
-						<text class="navBtn">{{$store.state.shakeSwitch?'关闭':'开启'}}助力</text>
+					<view class="typeBtn shakeSwitch" @click="shakeSwitch('')">
+						<text class="navBtn">{{shakeSwitchState?'关闭':'开启'}}助力</text>
 					</view>
 				</cover-view>
 			</video>
@@ -42,7 +43,8 @@
 				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
-				tstBtns: true
+				tstBtns: true,
+				shakeSwitchState: false
 			}
 		},
 		onLoad() {},
@@ -53,6 +55,7 @@
 				console.log('WebSocket连接已打开！');
 				that.$store.state.socketErr = "";
 			});
+			that.shakeSwitch('activityCheck');
 			that.getList();
 		},
 		onHide() {
@@ -99,15 +102,18 @@
 				console.log(_data);
 				that.$store.dispatch("sendSocketMessage", _data)
 			},
-			shakeSwitch() {
+			shakeSwitch(type) {
 				var that = this;
-				var shakeSwitchState = that.$store.state.shakeSwitch;
-				var _inter = shakeSwitchState ? 'activityStop' : 'activityStart';
+				var shakeSwitchState = that.shakeSwitchState;
+				var _inter = type ? type : (shakeSwitchState ? 'activityStop' : 'activityStart');
+				console.log(shakeSwitchState, _inter)
 				let _data = {
-					"inter": 'activityCheck' //_inter
+					"inter": _inter
 				};
 				_data["fun"] = function(res) {
-					that.$store.state.shakeSwitch = !shakeSwitchState;
+					if (res) {
+						that.shakeSwitchState = res == 'on' ? true : false;
+					}
 				}
 				that.$store.dispatch("getData", _data)
 
@@ -126,6 +132,9 @@
 			setTxtType(type) {
 				var that = this;
 				that.txtType = type;
+			},
+			reset() {
+				this.list = [];
 			}
 		}
 	}
@@ -153,9 +162,14 @@
 	.typeBox {
 		position: absolute;
 		z-index: 1;
-		right: 5%;
-		bottom: 5%;
+		right: 1%;
+		top: 1%;
 		text-align: right;
+		line-height: 0;
+		display: flex;
+		justify-content: flex-end;
+		flex-direction: column;
+		align-items: flex-end;
 	}
 
 	.typeBtn,
@@ -167,11 +181,15 @@
 		display: none;
 	}
 
+	.socketErr {
+		display: inline-block;
+	}
 
 	.nav {
 		display: inline;
 		position: relative;
 		line-height: 1.2;
+		opacity: 0.5;
 	}
 
 	.typeBox:hover .typeBtn {
