@@ -5,7 +5,7 @@
 				<block v-for="(obj,k) in list" :key="k">
 					<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 				</block>
-				<cover-view class="typeBox">
+				<cover-view class="typeBox" v-if="tstBtns">
 					<view class="typeBtn" @click="test">测试</view>
 					<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
 					<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
@@ -35,7 +35,8 @@
 				bgIs: "video",
 				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
-				list: []
+				list: [],
+				tstBtns: true
 			}
 		},
 		onLoad() {},
