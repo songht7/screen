@@ -48,7 +48,7 @@
 			}
 		},
 		onLoad() {
-			that.shakeSwitch('activityCheck');
+			//that.shakeSwitch('activityCheck');
 		},
 		onShow() {
 			var that = this;
