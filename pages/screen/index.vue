@@ -15,7 +15,7 @@
 						<view class="typeBtn" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 					</block>
 					<view class="typeBtn shakeSwitch" @click="shakeSwitch">
-						<text class="navBtn">{{$store.state.shakeSwitch?'关闭':'开启'}}摇一摇</text>
+						<text class="navBtn">{{$store.state.shakeSwitch?'关闭':'开启'}}助力</text>
 					</view>
 				</cover-view>
 			</video>
@@ -158,7 +158,8 @@
 		text-align: right;
 	}
 
-	.typeBtn,.nav {
+	.typeBtn,
+	.nav {
 		color: #FFFFFF;
 		font-size: 12upx;
 		line-height: 1.4;
@@ -172,6 +173,7 @@
 		position: relative;
 		line-height: 1.2;
 	}
+
 	.typeBox:hover .typeBtn {
 		display: block;
 	}
