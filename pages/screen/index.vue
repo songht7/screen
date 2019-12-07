@@ -47,7 +47,9 @@
 				shakeSwitchState: false
 			}
 		},
-		onLoad() {},
+		onLoad() {
+			that.shakeSwitch('activityCheck');
+		},
 		onShow() {
 			var that = this;
 			this.$store.dispatch("connectSocket")
