@@ -5,12 +5,18 @@
 				<block v-for="(obj,k) in list" :key="k">
 					<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 				</block>
-				<cover-view class="typeBox" v-if="tstBtns">
-					<view class="typeBtn" @click="test">测试</view>
-					<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
-					<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
-					<view class="typeBtn" @click="changeShaneType">切换</view>
-					<view class="typeBtn" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
+				<cover-view class="typeBox">
+					<text class="nav">—</text>
+					<block v-if="tstBtns">
+						<view class="typeBtn" @click="test">测试</view>
+						<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
+						<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
+						<view class="typeBtn" @click="changeShaneType">切换</view>
+						<view class="typeBtn" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
+					</block>
+					<view class="typeBtn shakeSwitch" @click="shakeSwitch">
+						<text class="navBtn">{{$store.state.shakeSwitch?'关闭':'开启'}}摇一摇</text>
+					</view>
 				</cover-view>
 			</video>
 		</block>
@@ -45,6 +51,7 @@
 			this.$store.dispatch("connectSocket")
 			uni.onSocketOpen(function(res) {
 				console.log('WebSocket连接已打开！');
+				that.$store.state.socketErr = "";
 			});
 			that.getList();
 		},
@@ -92,6 +99,19 @@
 				console.log(_data);
 				that.$store.dispatch("sendSocketMessage", _data)
 			},
+			shakeSwitch() {
+				var that = this;
+				var shakeSwitchState = that.$store.state.shakeSwitch;
+				var _inter = shakeSwitchState ? 'activityStop' : 'activityStart';
+				let _data = {
+					"inter": 'activityCheck' //_inter
+				};
+				_data["fun"] = function(res) {
+					that.$store.state.shakeSwitch = !shakeSwitchState;
+				}
+				that.$store.dispatch("getData", _data)
+
+			},
 			changeShaneType() {
 				this.sType = this.sType == "floating" ? "fadeUpOut" : "floating";
 			},
@@ -135,11 +155,44 @@
 		z-index: 1;
 		right: 5%;
 		bottom: 5%;
+		text-align: right;
 	}
 
-	.typeBtn {
+	.typeBtn,.nav {
 		color: #FFFFFF;
 		font-size: 12upx;
 		line-height: 1.4;
+		cursor: pointer;
+		display: none;
+	}
+
+
+	.nav {
+		display: inline;
+		position: relative;
+		line-height: 1.2;
+	}
+	.typeBox:hover .typeBtn {
+		display: block;
+	}
+
+	.typeBox:hover .nav {
+		display: none;
+	}
+
+	.nav:before,
+	.nav:after {
+		content: "—";
+		color: inherit;
+		font-size: inherit;
+		position: absolute;
+		top: 20%;
+		left: 0;
+		line-height: 0;
+	}
+
+	.nav:after {
+		top: auto;
+		bottom: 20%;
 	}
 </style>
