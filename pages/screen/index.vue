@@ -8,16 +8,17 @@
 				<cover-view class="typeBox">
 					<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 					<text class="nav">—</text>
+					<view class="typeBtn shakeSwitch" @click="shakeSwitch('')">
+						<text class="navBtn">{{shakeSwitchState?'关闭':'开启'}}助力</text>
+					</view>
 					<block v-if="tstBtns">
 						<view class="typeBtn" @click="test">测试</view>
 						<view class="typeBtn" @click="reset">清空</view>
 						<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
 						<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
 						<view class="typeBtn" @click="changeShaneType">切换</view>
+						<view class="typeBtn" @click="closeTst">关闭测试按钮</view>
 					</block>
-					<view class="typeBtn shakeSwitch" @click="shakeSwitch('')">
-						<text class="navBtn">{{shakeSwitchState?'关闭':'开启'}}助力</text>
-					</view>
 				</cover-view>
 			</video>
 		</block>
@@ -137,6 +138,9 @@
 			},
 			reset() {
 				this.list = [];
+			},
+			closeTst() {
+				this.tstBtns = false
 			}
 		}
 	}
