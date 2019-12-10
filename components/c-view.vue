@@ -87,7 +87,7 @@
 	.floating {
 		opacity: 0;
 		animation-name: floating;
-		animation-duration: 3s;
+		animation-duration: 5s;
 		animation-direction: alternate;
 		animation-timing-function: linear;
 		animation-iteration-count: 6;
@@ -159,7 +159,7 @@
 
 	@keyframes floating {
 		from {
-			opacity: 0.1;
+			opacity: 0.3;
 		}
 
 		to {
