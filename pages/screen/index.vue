@@ -40,8 +40,8 @@
 				muted: true,
 				video: "/static/video.mp4",
 				bubble: "./static/bubble.svg",
-				bgIs: "video",
-				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀
+				bgIs: "video", //背景video img
+				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
 				tstBtns: true,
@@ -79,12 +79,21 @@
 					console.log(res)
 					if (res.data != 'space_close') {
 						var _list = that.list;
-						let p = {
+						var _data = res.data;
+						var bles = _data.split(',');
+						var p = {
 							"name": res.data
+						}
+						if (bles && bles[0] == 'blessing') {
+							p = {
+								"name": bles[1],
+								"city": bles[2],
+								"blessing": bles[3]
+							}
 						}
 						setTimeout(() => {
 							_list.push(p);
-						}, 2500)
+						}, 30000)
 					}
 				}
 				that.$store.dispatch("onSocketMessage", _data)
@@ -128,7 +137,9 @@
 				var that = this;
 				var _list = that.list;
 				let p = {
-					"name": "测试字"
+					"name": "恒洁",
+					// "city":"上海",
+					// "danmu":"欢迎莅临恒洁2020年度经销商大会"
 				}
 				_list.push(p);
 			},

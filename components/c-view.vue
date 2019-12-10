@@ -1,9 +1,13 @@
 <template>
-	<cover-view :class="['coverView',shine>50?'shine big':'',shaneType]" :style="{'left':randomLeft,'bottom':shaneType=='floating'?randomBottom:'2%'}">
+	<!-- shine>50?'shine big':'', -->
+	<cover-view :class="['coverView',shaneType]" :style="{'left':randomLeft,'bottom':shaneType=='floating'?randomBottom:'2%'}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view :class="['cover-name',txtType]">
-				{{list.name}}
+				{{list.name}} {{list.city?list.city:''}}
+			</view>
+			<view v-if="list.blessing" :class="['cover-name',txtType]">
+				{{list.blessing}}
 			</view>
 		</view>
 	</cover-view>
@@ -63,8 +67,8 @@
 
 <style>
 	.coverView {
-		width: 100upx;
-		height: 100upx;
+		/* width: 100upx;
+		height: 100upx; */
 		position: absolute;
 		overflow: initial;
 		bottom: 2%;
@@ -84,9 +88,10 @@
 		opacity: 0;
 		animation-name: floating;
 		animation-duration: 3s;
-		animation-direction:alternate;
+		animation-direction: alternate;
 		animation-timing-function: linear;
 		animation-iteration-count: 6;
+		/* 6; infinite*/
 		animation-fill-mode: none;
 	}
 
@@ -156,6 +161,7 @@
 		from {
 			opacity: 0.1;
 		}
+
 		to {
 			opacity: 1;
 		}
@@ -182,9 +188,9 @@
 		color: #FFF;
 		z-index: 2;
 		font-size: 24upx;
-		position: absolute;
+		/* position: absolute; */
 		top: 0;
-		line-height: 1;
+		line-height: 1.4;
 		width: 100%;
 		height: 100%;
 		display: flex;
@@ -196,9 +202,6 @@
 
 	.floating .cover-name {
 		color: #CB937D;
-		background-image: -webkit-linear-gradient(left, #CBB281, #DB9824);
-		-webkit-text-fill-color: transparent;
-		-webkit-background-clip: text;
 		background-size: 100% 100%;
 	}
 
@@ -212,6 +215,9 @@
 	}
 
 	.cover-name.gradual {
+		background-image: -webkit-linear-gradient(left, #CBB281, #DB9824);
+		-webkit-text-fill-color: transparent;
+		-webkit-background-clip: text;
 		background-size: 200% 100%;
 		animation: masked-animation 4s infinite linear;
 		/* animation-play-state: paused; */
@@ -241,6 +247,7 @@
 				0 0 40px #DB9824,
 				0 0 70px #DB9824;
 		}
+
 		/* from {
 			text-shadow: 0 0 5px #CBB281,
 				0 0 10px #CBB281,
