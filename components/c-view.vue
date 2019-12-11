@@ -1,6 +1,6 @@
 <template>
 	<!-- shine>50?'shine big':'', -->
-	<cover-view :class="['coverView',shaneType]" :style="{'left':randomLeft,'bottom':shaneType=='floating'?randomBottom:'2%'}">
+	<cover-view :class="['coverView',shaneType,'c-'+ckey]" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:position[list.position]):{'left':randomLeft,'bottom':'2%'}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view :class="['cover-name',txtType]">
@@ -23,6 +23,10 @@
 					return {}
 				}
 			},
+			ckey: {
+				type: Number,
+				default: 0
+			},
 			shaneType: {
 				type: String,
 				default: ""
@@ -38,11 +42,60 @@
 			bubbleShow: {
 				type: Boolean,
 				default: false
+			},
+			animationCount: {
+				type: String,
+				default: "infinite" //floating:infinite / 6, fadeUpOut:1
 			}
 		},
 		data() {
 			return {
-
+				position: [{
+					"left": '12%',
+					"bottom": "55%"
+				}, {
+					"left": '20%',
+					"bottom": "70%"
+				}, {
+					"left": '30%',
+					"bottom": "80%"
+				}, {
+					"left": '40%',
+					"bottom": "70%"
+				}, {
+					"left": '50%',
+					"bottom": "80%"
+				}, {
+					"left": '60%',
+					"bottom": "70%"
+				}, {
+					"left": '70%',
+					"bottom": "80%"
+				}, {
+					"left": '65%',
+					"bottom": "55%"
+				}, {
+					"left": '60%',
+					"bottom": "40%"
+				}, {
+					"left": '75%',
+					"bottom": "60%"
+				}, {
+					"left": '55%',
+					"bottom": "25%"
+				}, {
+					"left": '45%',
+					"bottom": "40%"
+				}, {
+					"left": '35%',
+					"bottom": "25%"
+				}, {
+					"left": '25%',
+					"bottom": "40%"
+				}, {
+					"left": '18%',
+					"bottom": "25%"
+				}]
 			};
 		},
 		computed: {
@@ -62,6 +115,7 @@
 				return _shine;
 			}
 		},
+		methods: {}
 	}
 </script>
 
@@ -91,7 +145,6 @@
 		animation-direction: alternate;
 		animation-timing-function: linear;
 		animation-iteration-count: 6;
-		/* 6; infinite*/
 		animation-fill-mode: none;
 	}
 
@@ -159,7 +212,7 @@
 
 	@keyframes floating {
 		from {
-			opacity: 0.3;
+			opacity: 0.1;
 		}
 
 		to {
@@ -187,7 +240,7 @@
 	.cover-name {
 		color: #FFF;
 		z-index: 2;
-		font-size: 24upx;
+		font-size: 22upx;
 		/* position: absolute; */
 		top: 0;
 		line-height: 1.4;

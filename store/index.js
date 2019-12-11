@@ -16,7 +16,8 @@ const store = new Vuex.Store({
 		interface: common.Interface,
 		systemInfo: {},
 		socketOpen: false,
-		socketErr: ""
+		socketErr: "",
+		rPosition: 0
 	},
 	mutations: {
 		setSystemInfo(state, data) {

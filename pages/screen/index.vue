@@ -3,7 +3,7 @@
 		<block v-if="bgIs=='video'">
 			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
 				<block v-for="(obj,k) in list" :key="k">
-					<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
+					<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 				</block>
 				<cover-view class="typeBox">
 					<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
@@ -24,7 +24,7 @@
 		</block>
 		<block v-else>
 			<block v-for="(obj,k) in list" :key="k">
-				<cView :list="obj" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
+				<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 			</block>
 		</block>
 	</view>
@@ -45,7 +45,8 @@
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
 				tstBtns: true,
-				shakeSwitchState: false
+				shakeSwitchState: false,
+				fixedPosition: 14 //固定位置数0-max
 			}
 		},
 		onLoad() {
@@ -88,8 +89,12 @@
 							p = {
 								"name": bles[1],
 								"city": bles[2],
-								"blessing": bles[3]
+								"blessing": bles[3],
+								"position": 'random'
 							}
+						} else {
+							let pos = that.loopPosition();
+							p['position'] = pos; //pos 'random';
 						}
 						setTimeout(() => {
 							_list.push(p);
@@ -130,6 +135,16 @@
 				that.$store.dispatch("getData", _data)
 
 			},
+			loopPosition() {
+				var that = this;
+				let _rPosition = that.$store.state.rPosition;
+				let _random = _rPosition + 1;
+				if (_random > that.fixedPosition) {
+					_random = 0
+				}
+				that.$store.state.rPosition = _random;
+				return _random;
+			},
 			changeShaneType() {
 				this.sType = this.sType == "floating" ? "fadeUpOut" : "floating";
 			},
@@ -137,11 +152,16 @@
 				var that = this;
 				var _list = that.list;
 				let p = {
-					"name": "恒洁",
+					"name": "恒洁洁",
 					// "city":"上海",
 					// "danmu":"欢迎莅临恒洁2020年度经销商大会"
 				}
-				_list.push(p);
+				let pos = that.loopPosition();
+				p['position'] = pos; //pos 'random';
+				console.log(p)
+				setTimeout(() => {
+					_list.push(p);
+				}, 1000)
 			},
 			setTxtType(type) {
 				var that = this;
