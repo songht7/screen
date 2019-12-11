@@ -46,7 +46,8 @@
 				list: [],
 				tstBtns: true,
 				shakeSwitchState: false,
-				fixedPosition: 14 //固定位置数0-max
+				fixedPosition: 14, //固定位置数0-max
+				fixedType: true //是否固定 true false
 			}
 		},
 		onLoad() {
@@ -143,6 +144,9 @@
 					_random = 0
 				}
 				that.$store.state.rPosition = _random;
+				if (!that.fixedType) {
+					_random = 'random';
+				}
 				return _random;
 			},
 			changeShaneType() {
