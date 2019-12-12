@@ -55,7 +55,7 @@
 					"bottom": "55%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '40%',
+					"left": '38%',
 					"bottom": "70%",
 					"animation-iteration-count": this.animationCount
 				}, {
@@ -63,11 +63,15 @@
 					"bottom": "70%",
 					"animation-iteration-count": this.animationCount
 				}, {
+					"left": '32%',
+					"bottom": "40%",
+					"animation-iteration-count": this.animationCount
+				}, {
 					"left": '65%',
 					"bottom": "55%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '25%',
+					"left": '22%',
 					"bottom": "40%",
 					"animation-iteration-count": this.animationCount
 				}, {
@@ -75,19 +79,15 @@
 					"bottom": "60%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '30%',
-					"bottom": "80%",
+					"left": '32%',
+					"bottom": "82%",
 					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '60%',
 					"bottom": "40%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '55%',
-					"bottom": "25%",
-					"animation-iteration-count": this.animationCount
-				}, {
-					"left": '35%',
+					"left": '40%',
 					"bottom": "25%",
 					"animation-iteration-count": this.animationCount
 				}, {
@@ -95,12 +95,32 @@
 					"bottom": "80%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '20%',
+					"left": '55%',
+					"bottom": "25%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '28%',
+					"bottom": "25%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '80%',
+					"bottom": "85%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '18%',
+					"bottom": "82%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '48%',
+					"bottom": "75%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '25%',
 					"bottom": "70%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '50%',
-					"bottom": "80%",
+					"left": '55%',
+					"bottom": "85%",
 					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '18%',

@@ -53,7 +53,7 @@
 				clearLi: false, //是否清除list
 				tstBtns: true, //测试按钮
 				shakeSwitchState: false,
-				fixedPosition: 14, //固定位置数0-max
+				fixedPosition: 19, //固定位置数0-max
 				fixedType: true, //是否固定 true false
 				switchBtn: false
 			}
@@ -80,6 +80,9 @@
 			setInterval(() => {
 				that.setList();
 			}, 20000);
+			// setTimeout(() => {
+			// 	that.setList();
+			// }, 10000);
 		},
 		onHide() {
 			this.sendSocketMessage('space_close')
