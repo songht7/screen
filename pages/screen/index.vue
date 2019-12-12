@@ -50,6 +50,7 @@
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
 				listStorage: [], //list 存储
+				listDelay: [], //延时存储
 				clearLi: false, //是否清除list
 				tstBtns: true, //测试按钮
 				shakeSwitchState: false,
@@ -118,10 +119,15 @@
 							let pos = that.loopPosition();
 							p['position'] = pos; //pos 'random';
 						}
+						that.listDelay.push(p)
 						setTimeout(() => {
-							that.listStorage.push(p);
+							let _listDelay = that.listDelay;
+							var _listStorage = that.listStorage;
+							that.listStorage = [..._listStorage, ..._listDelay];
+							that.listDelay = [];
+							//that.listStorage.push(p);
 							that.setListStorage();
-						}, 30000)
+						}, 25000)
 					}
 				}
 				that.$store.dispatch("onSocketMessage", _data)
@@ -236,7 +242,6 @@
 			},
 			test() {
 				var that = this;
-				var _listStorage = that.listStorage;
 				let p = {
 					"name": "恒洁洁",
 					// "city":"上海",
@@ -245,10 +250,14 @@
 				let pos = that.loopPosition();
 				p['position'] = pos; //pos 'random';
 				console.log(p)
+				that.listDelay.push(p);
 				setTimeout(() => {
-					_listStorage.push(p);
+					let _listDelay = that.listDelay;
+					var _listStorage = that.listStorage;
+					that.listStorage = [..._listStorage, ..._listDelay];
+					that.listDelay = [];
 					that.setListStorage();
-				}, 30000)
+				}, 25000)
 				// setTimeout(() => {
 				// 	that.setList();
 				// }, 10000)
