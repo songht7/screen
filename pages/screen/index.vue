@@ -159,7 +159,7 @@
 									if (that.clearLi) {
 										that.clearList()
 									}
-								}, 19000)
+								}, 25000)
 							}
 						} else {
 							console.log("to-clearList-2:")
@@ -170,7 +170,7 @@
 								if (that.clearLi) {
 									that.clearList()
 								}
-							}, 19000)
+							}, 25000)
 						}
 					}
 				});
