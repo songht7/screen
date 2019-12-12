@@ -43,58 +43,73 @@
 				type: Boolean,
 				default: false
 			},
-			animationCount: {
+			animationCount: { //floating:infinite / 6, fadeUpOut:1
 				type: String,
-				default: "infinite" //floating:infinite / 6, fadeUpOut:1
+				default: "6"
 			}
 		},
 		data() {
 			return {
 				position: [{
 					"left": '12%',
-					"bottom": "55%"
-				}, {
-					"left": '20%',
-					"bottom": "70%"
-				}, {
-					"left": '30%',
-					"bottom": "80%"
+					"bottom": "55%",
+					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '40%',
-					"bottom": "70%"
-				}, {
-					"left": '50%',
-					"bottom": "80%"
+					"bottom": "70%",
+					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '60%',
-					"bottom": "70%"
-				}, {
-					"left": '70%',
-					"bottom": "80%"
+					"bottom": "70%",
+					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '65%',
-					"bottom": "55%"
-				}, {
-					"left": '60%',
-					"bottom": "40%"
-				}, {
-					"left": '75%',
-					"bottom": "60%"
-				}, {
-					"left": '55%',
-					"bottom": "25%"
-				}, {
-					"left": '45%',
-					"bottom": "40%"
-				}, {
-					"left": '35%',
-					"bottom": "25%"
+					"bottom": "55%",
+					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '25%',
-					"bottom": "40%"
+					"bottom": "40%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '75%',
+					"bottom": "60%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '30%',
+					"bottom": "80%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '60%',
+					"bottom": "40%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '55%',
+					"bottom": "25%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '35%',
+					"bottom": "25%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '70%',
+					"bottom": "80%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '20%',
+					"bottom": "70%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '50%',
+					"bottom": "80%",
+					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '18%',
-					"bottom": "25%"
+					"bottom": "25%",
+					"animation-iteration-count": this.animationCount
+				}, {
+					"left": '45%',
+					"bottom": "40%",
+					"animation-iteration-count": this.animationCount
 				}]
 			};
 		},
@@ -141,7 +156,7 @@
 	.floating {
 		opacity: 0;
 		animation-name: floating;
-		animation-duration: 5s;
+		animation-duration: 3s;
 		animation-direction: alternate;
 		animation-timing-function: linear;
 		animation-iteration-count: 6;
@@ -240,7 +255,7 @@
 	.cover-name {
 		color: #FFF;
 		z-index: 2;
-		font-size: 22upx;
+		font-size: 10upx;
 		/* position: absolute; */
 		top: 0;
 		line-height: 1.4;

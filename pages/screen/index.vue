@@ -6,8 +6,9 @@
 					<block v-for="(obj,k) in list" :key="k">
 						<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 					</block>
-					<cover-view class="typeBox">
-						<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
+					<cover-view class="typeBox screen-type-box">
+						<view class="typeBtn screen-tst socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
+						<view class="typeBtn screen-tst" @click="test">测试</view>
 					</cover-view>
 				</video>
 			</block>
@@ -48,6 +49,8 @@
 				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
+				listStorage: [], //list 存储
+				clearLi: false, //是否清除list
 				tstBtns: true, //测试按钮
 				shakeSwitchState: false,
 				fixedPosition: 14, //固定位置数0-max
@@ -74,6 +77,9 @@
 			});
 			that.shakeSwitch('activityCheck');
 			that.getList();
+			setInterval(() => {
+				that.setList();
+			}, 20000);
 		},
 		onHide() {
 			this.sendSocketMessage('space_close')
@@ -92,7 +98,6 @@
 				_data["fun"] = function(res) {
 					console.log(res)
 					if (res.data != 'space_close') {
-						var _list = that.list;
 						var _data = res.data;
 						var bles = _data.split(',');
 						var p = {
@@ -109,12 +114,54 @@
 							let pos = that.loopPosition();
 							p['position'] = pos; //pos 'random';
 						}
-						setTimeout(() => {
-							_list.push(p);
-						}, 30000)
+						that.listStorage.push(p);
+						that.setListStorage();
 					}
 				}
 				that.$store.dispatch("onSocketMessage", _data)
+			},
+			setList() {
+				var that = this;
+				uni.getStorage({
+					key: 'listStorage',
+					success: function(res) {
+						console.log(res.data);
+						var _listStorag = res.data;
+						if (_listStorag.length) {
+							var _fixedPosition = that.fixedPosition;
+							var temp = _listStorag.filter((obj, k) => k <= _fixedPosition);
+							that.list = [...temp];
+							that.listStorage = _listStorag.filter((obj, k) => k > _fixedPosition)
+							that.setListStorage();
+							console.log("_listStorag：", that.listStorage)
+							console.log("list：", that.list)
+							if (!that.clearLi) {
+								that.clearLi = true;
+							}
+							setTimeout(() => {
+								if (that.clearLi) {
+									that.clearList()
+								}
+							}, 19000)
+						}
+					}
+				});
+			},
+			clearList() {
+				console.log("clearList")
+				this.clearLi = false;
+				this.list = [];
+			},
+			setListStorage() {
+				var that = this;
+				var _listStorag = that.listStorage;
+				uni.setStorage({
+					key: 'listStorage',
+					data: _listStorag,
+					success: function() {
+						//console.log('success');
+					}
+				});
 			},
 			sendSocketMessage(val) {
 				var that = this;
@@ -166,7 +213,7 @@
 			},
 			test() {
 				var that = this;
-				var _list = that.list;
+				var _listStorage = that.listStorage;
 				let p = {
 					"name": "恒洁洁",
 					// "city":"上海",
@@ -175,9 +222,11 @@
 				let pos = that.loopPosition();
 				p['position'] = pos; //pos 'random';
 				console.log(p)
-				setTimeout(() => {
-					_list.push(p);
-				}, 1000)
+				_listStorage.push(p);
+				that.setListStorage();
+				// setTimeout(() => {
+				// 	that.setList();
+				// }, 10000)
 			},
 			setTxtType(type) {
 				var that = this;
@@ -221,11 +270,6 @@
 	}
 
 	.typeBox {
-		/* position: absolute;
-		z-index: 1;
-		right: 1%;
-		top: 1%; 
-		line-height: 0;*/
 		text-align: right;
 		line-height: 1.4;
 		display: flex;
@@ -241,6 +285,19 @@
 		line-height: 1.4;
 		cursor: pointer;
 		/* display: none; */
+	}
+
+	.screen-type-box {
+		position: absolute;
+		z-index: 1;
+		right: 1%;
+		top: 1%;
+		line-height: 0;
+		align-items: flex-end;
+	}
+
+	.screen-tst {
+		font-size: 16px;
 	}
 
 	.socketErr {
