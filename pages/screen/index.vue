@@ -128,8 +128,8 @@
 				uni.getStorage({
 					key: 'listStorage',
 					success: function(res) {
-						console.log(res.data);
 						var _listStorag = res.data.length ? res.data : that.listStorage;
+						console.log("getList:", _listStorag);
 						if (_listStorag.length) {
 							var _fixedPosition = that.fixedPosition;
 							var temp = _listStorag.filter((obj, k) => k <= _fixedPosition);
