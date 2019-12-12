@@ -129,14 +129,15 @@
 					key: 'listStorage',
 					success: function(res) {
 						console.log(res.data);
-						var _listStorag = res.data;
+						var _listStorag = res.data.length ? res.data : that.listStorage;
 						if (_listStorag.length) {
 							var _fixedPosition = that.fixedPosition;
 							var temp = _listStorag.filter((obj, k) => k <= _fixedPosition);
 							that.list = [...temp];
-							that.listStorage = _listStorag.filter((obj, k) => k > _fixedPosition)
+							var leftover = _listStorag.filter((obj, k) => k > _fixedPosition);
+							that.listStorage = leftover;
 							that.setListStorage();
-							console.log("_listStorag：", that.listStorage)
+							console.log("leftover：", that.listStorage)
 							console.log("list：", that.list)
 							if (!that.clearLi) {
 								that.clearLi = true;
@@ -158,6 +159,7 @@
 			setListStorage() {
 				var that = this;
 				var _listStorag = that.listStorage;
+				console.log("setListStorage:", _listStorag)
 				uni.setStorage({
 					key: 'listStorage',
 					data: _listStorag,
