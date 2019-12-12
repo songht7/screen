@@ -1,31 +1,35 @@
 <template>
-	<view class="content">
-		<block v-if="bgIs=='video'">
-			<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
-				<block v-for="(obj,k) in list" :key="k">
-					<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
-				</block>
-				<cover-view class="typeBox">
-					<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
-					<text class="nav">—</text>
-					<view class="typeBtn shakeSwitch" @click="shakeSwitch('')">
-						<text class="navBtn">{{shakeSwitchState?'关闭':'开启'}}助力</text>
-					</view>
-					<block v-if="tstBtns">
-						<view class="typeBtn" @click="test">测试</view>
-						<view class="typeBtn" @click="reset">清空</view>
-						<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
-						<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
-						<view class="typeBtn" @click="changeShaneType">切换</view>
-						<view class="typeBtn" @click="closeTst">关闭测试按钮</view>
+	<view class="content" :style="{'background-image':bgIs=='img'?'url(../../static/bg-scren.jpg)':'none'}">
+		<block v-if="!switchBtn">
+			<block v-if="bgIs=='video'">
+				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
+					<block v-for="(obj,k) in list" :key="k">
+						<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 					</block>
-				</cover-view>
-			</video>
-		</block>
-		<block v-else>
-			<block v-for="(obj,k) in list" :key="k">
+					<cover-view class="typeBox">
+						<view class="typeBtn socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
+					</cover-view>
+				</video>
+			</block>
+			<block v-else v-for="(obj,k) in list" :key="k">
 				<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
 			</block>
+		</block>
+		<block v-else>
+			<view class="typeBox switchBtns">
+				<text class="nav" v-show="false">—</text>
+				<view class="typeBtn shakeSwitch" @click="shakeSwitch('')" :style="{'font-size':$store.state.systemInfo.platform=='other'?'32px':'48upx'}">
+					<text class="navBtn">{{shakeSwitchState?'关闭':'开启'}}助力</text>
+				</view>
+				<block v-if="!tstBtns">
+					<view class="typeBtn" @click="test">测试</view>
+					<view class="typeBtn" @click="reset">清空</view>
+					<view class="typeBtn" @click="setTxtType('textFlash')">发光</view>
+					<view class="typeBtn" @click="setTxtType('gradual')">渐变</view>
+					<view class="typeBtn" @click="changeShaneType">切换</view>
+					<view class="typeBtn" @click="closeTst">关闭测试按钮</view>
+				</block>
+			</view>
 		</block>
 	</view>
 </template>
@@ -44,13 +48,21 @@
 				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
-				tstBtns: true,
+				tstBtns: true, //测试按钮
 				shakeSwitchState: false,
 				fixedPosition: 14, //固定位置数0-max
-				fixedType: true //是否固定 true false
+				fixedType: true, //是否固定 true false
+				switchBtn: false
 			}
 		},
-		onLoad() {
+		onLoad(option) {
+			var that = this;
+			let btn = option.btn ? true : false;
+			console.log(btn)
+			that.switchBtn = btn;
+			if (btn) {
+				that.$store.dispatch("getSystemInfo")
+			}
 			//that.shakeSwitch('activityCheck');
 		},
 		onShow() {
@@ -190,7 +202,9 @@
 	.content {
 		width: 100%;
 		height: 100%;
-		background: url(../../static/bg-scren.jpg) no-repeat 50% 50% #152152;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+		background-color: #152152;
 		background-size: contain;
 	}
 
@@ -200,26 +214,33 @@
 		position: relative;
 	}
 
+	.switchBtns {
+		width: 50%;
+		margin: 0 auto;
+		padding: 50upx 0 0;
+	}
+
 	.typeBox {
-		position: absolute;
+		/* position: absolute;
 		z-index: 1;
 		right: 1%;
-		top: 1%;
+		top: 1%; 
+		line-height: 0;*/
 		text-align: right;
-		line-height: 0;
+		line-height: 1.4;
 		display: flex;
 		justify-content: flex-end;
 		flex-direction: column;
-		align-items: flex-end;
+		align-items: center;
 	}
 
 	.typeBtn,
 	.nav {
 		color: #FFFFFF;
-		font-size: 12upx;
+		font-size: 48upx;
 		line-height: 1.4;
 		cursor: pointer;
-		display: none;
+		/* display: none; */
 	}
 
 	.socketErr {
@@ -233,13 +254,13 @@
 		opacity: 0.5;
 	}
 
-	.typeBox:hover .typeBtn {
+	/* 	.typeBox:hover .typeBtn {
 		display: block;
 	}
 
 	.typeBox:hover .nav {
 		display: none;
-	}
+	} */
 
 	.nav:before,
 	.nav:after {

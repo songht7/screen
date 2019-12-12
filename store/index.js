@@ -130,7 +130,7 @@ const store = new Vuex.Store({
 			uni.getSystemInfo({
 				success(res) {
 					systemInfo = res
-					console.log(systemInfo);
+					console.log("systemInfo：", systemInfo);
 				},
 				complete() {
 					ctx.commit("setSystemInfo", systemInfo)
