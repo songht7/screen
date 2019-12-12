@@ -54,6 +54,7 @@
 				tstBtns: true, //测试按钮
 				shakeSwitchState: false,
 				fixedPosition: 19, //固定位置数0-max
+				getContNumb: Math.floor(Math.random() * (5 - 1) + 1), //同时获取个数
 				fixedType: true, //是否固定 true false
 				switchBtn: false
 			}
@@ -79,7 +80,7 @@
 			that.getList();
 			setInterval(() => {
 				that.setList();
-			}, 20000);
+			}, 5000); //20000
 			// setTimeout(() => {
 			// 	that.setList();
 			// }, 10000);
@@ -117,8 +118,10 @@
 							let pos = that.loopPosition();
 							p['position'] = pos; //pos 'random';
 						}
-						that.listStorage.push(p);
-						that.setListStorage();
+						setTimeout(() => {
+							that.listStorage.push(p);
+							that.setListStorage();
+						}, 30000)
 					}
 				}
 				that.$store.dispatch("onSocketMessage", _data)
@@ -132,13 +135,28 @@
 						console.log("getList:", _listStorag);
 						if (_listStorag.length) {
 							var _fixedPosition = that.fixedPosition;
-							var temp = _listStorag.filter((obj, k) => k <= _fixedPosition);
-							that.list = [...temp];
-							var leftover = _listStorag.filter((obj, k) => k > _fixedPosition);
+							var _getContNumb = that.getContNumb;
+							var temp = _listStorag.filter((obj, k) => k <= _getContNumb); //_fixedPosition
+							var nowList = that.list;
+							that.list = [...nowList, ...temp];
+							var leftover = _listStorag.filter((obj, k) => k > _getContNumb);
 							that.listStorage = leftover;
 							that.setListStorage();
 							console.log("leftover：", that.listStorage)
 							console.log("list：", that.list)
+							if (that.list.length > _fixedPosition) {
+								console.log("to-clearList-1:")
+								if (!that.clearLi) {
+									that.clearLi = true;
+								}
+								setTimeout(() => {
+									if (that.clearLi) {
+										that.clearList()
+									}
+								}, 19000)
+							}
+						} else {
+							console.log("to-clearList-2:")
 							if (!that.clearLi) {
 								that.clearLi = true;
 							}
@@ -152,9 +170,9 @@
 				});
 			},
 			clearList() {
-				console.log("clearList")
+				this.list = this.list.filter((obj, k) => k > 10);
 				this.clearLi = false;
-				this.list = [];
+				console.log("clearList, list:", this.list)
 			},
 			setListStorage() {
 				var that = this;
@@ -227,8 +245,10 @@
 				let pos = that.loopPosition();
 				p['position'] = pos; //pos 'random';
 				console.log(p)
-				_listStorage.push(p);
-				that.setListStorage();
+				setTimeout(() => {
+					_listStorage.push(p);
+					that.setListStorage();
+				}, 30000)
 				// setTimeout(() => {
 				// 	that.setList();
 				// }, 10000)
