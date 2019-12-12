@@ -163,14 +163,16 @@
 							}
 						} else {
 							console.log("to-clearList-2:")
-							if (!that.clearLi) {
-								that.clearLi = true;
-							}
-							setTimeout(() => {
-								if (that.clearLi) {
-									that.clearList()
+							if (that.list.length > 0) {
+								if (!that.clearLi) {
+									that.clearLi = true;
 								}
-							}, 25000)
+								setTimeout(() => {
+									if (that.clearLi) {
+										that.clearList()
+									}
+								}, 25000)
+							}
 						}
 					}
 				});
