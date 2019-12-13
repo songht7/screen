@@ -82,9 +82,6 @@
 			setInterval(() => {
 				that.setList();
 			}, 5000); //20000
-			// setTimeout(() => {
-			// 	that.setList();
-			// }, 10000);
 		},
 		onHide() {
 			this.sendSocketMessage('space_close')
@@ -151,25 +148,23 @@
 							console.log("leftover：", that.listStorage)
 							console.log("list：", that.list)
 							if (that.list.length > _fixedPosition) {
-								console.log("to-clearList-1:")
 								if (!that.clearLi) {
 									that.clearLi = true;
 								}
 								setTimeout(() => {
 									if (that.clearLi) {
-										that.clearList()
+										that.clearList('1')
 									}
 								}, 25000)
 							}
 						} else {
-							console.log("to-clearList-2:")
 							if (that.list.length > 0) {
 								if (!that.clearLi) {
 									that.clearLi = true;
 								}
 								setTimeout(() => {
 									if (that.clearLi) {
-										that.clearList()
+										that.clearList('2')
 									}
 								}, 25000)
 							}
@@ -177,7 +172,8 @@
 					}
 				});
 			},
-			clearList() {
+			clearList(type) {
+				console.log("to-clearList-:", type)
 				this.list = this.list.filter((obj, k) => k > 10);
 				this.clearLi = false;
 				console.log("clearList, list:", this.list)
