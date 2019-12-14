@@ -2,14 +2,13 @@
 	<view class="content" :style="{'background-image':bgIs=='img'?'url(../../static/bg-scren.jpg)':'none'}">
 		<block v-if="!switchBtn">
 			<block v-if="bgIs=='video'">
-				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
+				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="'/static/'+videoType+'.mp4'">
 					<block v-for="(obj,k) in list" :key="k">
 						<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="shaneType" :txtType="txtType"></cView>
 					</block>
 					<cover-view class="typeBox screen-type-box">
 						<view class="typeBtn screen-tst socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 						<view class="typeBtn screen-tst" v-if="!false" @click="test">测试</view>
-						<view class="typeBtn screen-tst" v-if="!false" @click="test('blessing')">测试寄语</view>
 					</cover-view>
 				</video>
 			</block>
@@ -45,6 +44,7 @@
 				loop: true,
 				muted: true,
 				video: "/static/video.mp4",
+				videoType: "video", //vide:签到视频 blessing：寄语视频
 				bubble: "./static/bubble.svg",
 				bgIs: "video", //背景video img
 				shaneType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
@@ -56,17 +56,24 @@
 				tstBtns: true, //测试按钮
 				shakeSwitchState: false,
 				fixedPosition: 19, //固定位置数0-max
-				getContNumb: Math.floor(Math.random() * (5 - 1) + 1), //同时获取个数
+				getContNumb: 3, //同时获取个数 Math.floor(Math.random() * (5 - 1) + 1)
 				fixedType: true, //是否固定 true false
 				switchBtn: false,
 				delayTime: 25000, //延迟显示时间
 				clearTime: 25000, //清除list时间
+				clearState: true //是否清除list
 			}
 		},
 		onLoad(option) {
 			var that = this;
 			let btn = option.btn ? true : false;
-			console.log(btn)
+			let _videoType = option.type ? option.type : "video";
+			that.videoType = _videoType;
+			if (_videoType == 'blessing') {
+				that.fixedPosition = 8;
+				that.getContNumb = 1;
+				that.clearTime = 18000;
+			}
 			that.switchBtn = btn;
 			if (btn) {
 				that.$store.dispatch("getSystemInfo")
@@ -104,23 +111,26 @@
 					console.log(res)
 					if (res.data != 'space_close') {
 						var _data = res.data;
-						var bles = _data.split(',');
-						var p = {
-							"name": res.data
-						}
-						if (bles && bles[0] == 'blessing') {
+						var vType = that.videoType;
+						var pos = that.loopPosition();
+						var p = {};
+						if (vType == 'video') {
 							p = {
-								"name": bles[1],
-								"city": bles[2],
-								"blessing": bles[3],
-								"position": 'random'
+								"name": res.data,
+								"position": pos //pos 'random';
 							}
-							that.shaneType = 'danmu';
-							that.clearTime = 650000;
-							that.getContNumb = 1;
 						} else {
-							let pos = that.loopPosition();
-							p['position'] = pos; //pos 'random';
+							var bles = _data.split(',');
+							if (bles && bles[0] == 'blessing') {
+								p = {
+									"name": bles[1],
+									"city": bles[2],
+									"blessing": bles[3],
+									"position": pos, // pos 'random'
+									"danmu": true
+								}
+								//that.shaneType = 'danmu';
+							}
 						}
 						that.listDelay.push(p)
 						var _delayTime = that.delayTime;
@@ -138,59 +148,75 @@
 			},
 			setList() {
 				var that = this;
-				uni.getStorage({
-					key: 'listStorage',
-					success: function(res) {
-						var _listStorag = res.data.length ? res.data : that.listStorage;
-						console.log("getList:", _listStorag);
-						if (_listStorag.length) {
-							var _fixedPosition = that.fixedPosition;
-							var _getContNumb = that.getContNumb;
-							var temp = _listStorag.filter((obj, k) => k < _getContNumb); //_fixedPosition
-							var nowList = that.list;
-							that.list = [...nowList, ...temp];
-							var leftover = _listStorag.filter((obj, k) => k >= _getContNumb);
-							that.listStorage = leftover;
-							that.setListStorage();
-							console.log("leftover：", that.listStorage)
-							console.log("list：", that.list)
-							if (that.list.length > _fixedPosition) {
-								if (!that.clearLi) {
-									that.clearLi = true;
-								}
-								var _clearTime = that.clearTime;
-								setTimeout(() => {
-									if (that.clearLi) {
-										that.clearList('1')
-									}
-								}, _clearTime)
-							}
-						} else {
-							if (that.list.length > 0) {
-								if (!that.clearLi) {
-									that.clearLi = true;
-								}
-								var _clearTime = that.clearTime;
-								setTimeout(() => {
-									if (that.clearLi) {
-										that.clearList('2')
-									}
-								}, _clearTime)
-							}
+				var _listStorag = that.listStorage.length ? that.listStorage : [];
+				if (_listStorag.length <= 0) {
+					uni.getStorage({
+						key: 'listStorage',
+						success(res) {
+							_listStorag = res.data.length ? res.data : _listStorag;
+							that.setPageList(_listStorag);
+							// console.log("getList-res:", res.data);
+						},
+						complete() {}
+					});
+				} else {
+					that.setPageList(_listStorag);
+				}
+			},
+			setPageList(_listStorag) {
+				var that = this;
+				console.log("getList-listStorage:", _listStorag);
+				if (_listStorag.length) {
+					var _fixedPosition = that.fixedPosition;
+					var _getContNumb = that.getContNumb;
+					var temp = _listStorag.filter((obj, k) => k < _getContNumb); //_fixedPosition
+					var nowList = that.list;
+					that.list = [...nowList, ...temp];
+					console.log("---list---", that.list);
+					var leftover = _listStorag.filter((obj, k) => k >= _getContNumb);
+					that.listStorage = leftover;
+					that.setListStorage();
+					// console.log("leftover：", that.listStorage)
+					// console.log("list：", that.list)
+					if (that.list.length > _fixedPosition) {
+						if (!that.clearLi) {
+							that.clearLi = true;
 						}
+						var _clearTime = that.clearTime;
+						setTimeout(() => {
+							if (that.clearLi) {
+								that.clearList('1')
+							}
+						}, _clearTime)
 					}
-				});
+				} else {
+					if (that.list.length > 0) {
+						if (!that.clearLi) {
+							that.clearLi = true;
+						}
+						var _clearTime = that.clearTime;
+						setTimeout(() => {
+							if (that.clearLi) {
+								that.clearList('2')
+							}
+						}, _clearTime)
+					}
+				}
 			},
 			clearList(type) {
 				console.log("to-clearList-:", type)
-				this.list = this.list.filter((obj, k) => k > 10);
-				this.clearLi = false;
-				console.log("clearList, list:", this.list)
+				var that = this;
+				if (that.clearState) {
+					let _list = that.list;
+					that.list = _list.filter((obj, k) => k > that.getContNumb);
+					console.log("clearList, list:", that.list)
+				}
+				that.clearLi = false;
 			},
 			setListStorage() {
 				var that = this;
 				var _listStorag = that.listStorage;
-				console.log("setListStorage:", _listStorag)
+				//console.log("setListStorage:", _listStorag)
 				uni.setStorage({
 					key: 'listStorage',
 					data: _listStorag,
@@ -249,23 +275,26 @@
 			},
 			test(type) {
 				var that = this;
-				var p = {
-					"name": "恒洁洁"
-				}
-				if (type == 'blessing') {
+				var vType = that.videoType;
+				var pos = that.loopPosition();
+				var p = {};
+				if (vType == 'video') {
+					p = {
+						"name": "恒洁洁" + pos,
+						"position": pos //pos 'random';
+					}
+				} else {
+					p['name'] = "恒洁洁" + pos;
 					p['city'] = "上海";
 					p['blessing'] = "欢迎莅临恒洁2020年度经销商大会";
-					p['position'] = 'random';
-					that.shaneType = 'danmu';
-					that.clearTime = 650000;
-					that.getContNumb = 1;
-				} else {
-					let pos = that.loopPosition();
-					p['position'] = pos; //pos 'random' '';
+					p['position'] = pos; // pos;
+					p['danmu'] = true;
+					//that.shaneType = 'danmu';//设置显示风格
 				}
+				//that.clearState = false; /**************测试阻止清除list *************/
 				console.log(p)
 				that.listDelay.push(p);
-				var _delayTime = that.delayTime; // that.delayTime; 10000
+				var _delayTime = that.delayTime; // that.delayTime; 测试用 10000
 				setTimeout(() => {
 					let _listDelay = that.listDelay;
 					var _listStorage = that.listStorage;

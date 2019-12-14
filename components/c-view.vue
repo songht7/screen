@@ -1,12 +1,12 @@
 <template>
 	<!-- shine>50?'shine big':'', -->
-	<cover-view :class="['coverView',shaneType,'c-'+ckey]" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:position[list.position]):{'left':randomLeft,'bottom':randomBottom}">
+	<cover-view :class="['coverView',shaneType,'c-'+ckey,list.danmu?'coverView-danmu':'']" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:(list.danmu?dmPosition[list.position]:signPosition[list.position])):{'left':randomLeft,'bottom':randomBottom}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view :class="['cover-name',txtType]">
 				{{list.name}} {{list.city?list.city:''}}
 			</view>
-			<view v-if="list.blessing" :class="['cover-name',txtType]">
+			<view v-if="list.blessing" :class="['cover-name',txtType,'cover-blessing']">
 				{{list.blessing}}
 			</view>
 		</view>
@@ -50,7 +50,7 @@
 		},
 		data() {
 			return {
-				position: [{
+				signPosition: [{
 					"left": '12%',
 					"bottom": "55%",
 					"animation-iteration-count": this.animationCount
@@ -67,15 +67,15 @@
 					"bottom": "40%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '65%',
-					"bottom": "55%",
+					"left": '20%',
+					"bottom": "60%",
 					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '22%',
 					"bottom": "40%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '75%',
+					"left": '73%',
 					"bottom": "60%",
 					"animation-iteration-count": this.animationCount
 				}, {
@@ -92,7 +92,7 @@
 					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '70%',
-					"bottom": "80%",
+					"bottom": "82%",
 					"animation-iteration-count": this.animationCount
 				}, {
 					"left": '55%',
@@ -103,11 +103,11 @@
 					"bottom": "25%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '80%',
-					"bottom": "85%",
+					"left": '77%',
+					"bottom": "75%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '18%',
+					"left": '20%',
 					"bottom": "82%",
 					"animation-iteration-count": this.animationCount
 				}, {
@@ -115,7 +115,7 @@
 					"bottom": "75%",
 					"animation-iteration-count": this.animationCount
 				}, {
-					"left": '25%',
+					"left": '27%',
 					"bottom": "70%",
 					"animation-iteration-count": this.animationCount
 				}, {
@@ -129,6 +129,43 @@
 				}, {
 					"left": '45%',
 					"bottom": "40%",
+					"animation-iteration-count": this.animationCount
+				}],
+				dmPosition: [{
+					"left": '2%',
+					"bottom": "55%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '16%',
+					"bottom": "23%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '18%',
+					"bottom": "75%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '35%',
+					"bottom": "70%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '52%',
+					"bottom": "75%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '68%',
+					"bottom": "55%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '32%',
+					"bottom": "30%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '50%',
+					"bottom": "25%",
+					"animation-iteration-count": this.animationCount
+				},{
+					"left": '20%',
+					"bottom": "50%",
 					"animation-iteration-count": this.animationCount
 				}]
 			};
@@ -162,6 +199,15 @@
 		overflow: initial;
 		bottom: 2%;
 		opacity: 0.5;
+	}
+
+	.coverView-danmu {
+		width: 250px;
+		height: auto;
+	}
+	uni-cover-view.coverView-danmu{
+		white-space: pre-wrap;
+		word-break: break-all;
 	}
 
 	.fadeUpOut {
@@ -287,6 +333,10 @@
 		flex-direction: row;
 		align-content: center;
 		align-items: center;
+	}
+	.coverView-danmu .cover-name{
+		justify-content:flex-start;
+		font-size: 8upx;
 	}
 
 	.floating .cover-name {
