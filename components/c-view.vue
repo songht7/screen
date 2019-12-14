@@ -1,6 +1,6 @@
 <template>
 	<!-- shine>50?'shine big':'', -->
-	<cover-view :class="['coverView',shaneType,'c-'+ckey]" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:position[list.position]):{'left':randomLeft,'bottom':'2%'}">
+	<cover-view :class="['coverView',shaneType,'c-'+ckey]" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:position[list.position]):{'left':randomLeft,'bottom':randomBottom}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view :class="['cover-name',txtType]">
@@ -364,5 +364,38 @@
 		width: 100%;
 		position: relative;
 		z-index: 1;
+	}
+
+	.danmu {
+		opacity: 0;
+		animation-name: danmu;
+		animation-duration: 60s;
+		animation-timing-function: ease-in-out;
+		animation-iteration-count: 1;
+		animation-fill-mode: forwards;
+	}
+
+	@keyframes danmu {
+		0% {
+			left: 110%;
+			opacity: 0;
+		}
+
+		5% {
+			opacity: 0.5;
+		}
+
+		10% {
+			opacity: 0.8;
+		}
+
+		30% {
+			opacity: 1;
+		}
+
+		100% {
+			opacity: 1;
+			left: -110%;
+		}
 	}
 </style>

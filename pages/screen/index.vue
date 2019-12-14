@@ -4,16 +4,17 @@
 			<block v-if="bgIs=='video'">
 				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="video">
 					<block v-for="(obj,k) in list" :key="k">
-						<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
+						<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="shaneType" :txtType="txtType"></cView>
 					</block>
 					<cover-view class="typeBox screen-type-box">
 						<view class="typeBtn screen-tst socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
 						<view class="typeBtn screen-tst" v-if="!false" @click="test">测试</view>
+						<view class="typeBtn screen-tst" v-if="!false" @click="test('blessing')">测试寄语</view>
 					</cover-view>
 				</video>
 			</block>
 			<block v-else v-for="(obj,k) in list" :key="k">
-				<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="sType" :txtType="txtType"></cView>
+				<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="shaneType" :txtType="txtType"></cView>
 			</block>
 		</block>
 		<block v-else>
@@ -46,7 +47,7 @@
 				video: "/static/video.mp4",
 				bubble: "./static/bubble.svg",
 				bgIs: "video", //背景video img
-				sType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
+				shaneType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				list: [],
 				listStorage: [], //list 存储
@@ -57,7 +58,9 @@
 				fixedPosition: 19, //固定位置数0-max
 				getContNumb: Math.floor(Math.random() * (5 - 1) + 1), //同时获取个数
 				fixedType: true, //是否固定 true false
-				switchBtn: false
+				switchBtn: false,
+				delayTime: 25000, //延迟显示时间
+				clearTime: 25000, //清除list时间
 			}
 		},
 		onLoad(option) {
@@ -112,11 +115,15 @@
 								"blessing": bles[3],
 								"position": 'random'
 							}
+							that.shaneType = 'danmu';
+							that.clearTime = 650000;
+							that.getContNumb = 1;
 						} else {
 							let pos = that.loopPosition();
 							p['position'] = pos; //pos 'random';
 						}
 						that.listDelay.push(p)
+						var _delayTime = that.delayTime;
 						setTimeout(() => {
 							let _listDelay = that.listDelay;
 							var _listStorage = that.listStorage;
@@ -124,7 +131,7 @@
 							that.listDelay = [];
 							//that.listStorage.push(p);
 							that.setListStorage();
-						}, 25000)
+						}, _delayTime)
 					}
 				}
 				that.$store.dispatch("onSocketMessage", _data)
@@ -139,10 +146,10 @@
 						if (_listStorag.length) {
 							var _fixedPosition = that.fixedPosition;
 							var _getContNumb = that.getContNumb;
-							var temp = _listStorag.filter((obj, k) => k <= _getContNumb); //_fixedPosition
+							var temp = _listStorag.filter((obj, k) => k < _getContNumb); //_fixedPosition
 							var nowList = that.list;
 							that.list = [...nowList, ...temp];
-							var leftover = _listStorag.filter((obj, k) => k > _getContNumb);
+							var leftover = _listStorag.filter((obj, k) => k >= _getContNumb);
 							that.listStorage = leftover;
 							that.setListStorage();
 							console.log("leftover：", that.listStorage)
@@ -151,22 +158,24 @@
 								if (!that.clearLi) {
 									that.clearLi = true;
 								}
+								var _clearTime = that.clearTime;
 								setTimeout(() => {
 									if (that.clearLi) {
 										that.clearList('1')
 									}
-								}, 25000)
+								}, _clearTime)
 							}
 						} else {
 							if (that.list.length > 0) {
 								if (!that.clearLi) {
 									that.clearLi = true;
 								}
+								var _clearTime = that.clearTime;
 								setTimeout(() => {
 									if (that.clearLi) {
 										that.clearList('2')
 									}
-								}, 25000)
+								}, _clearTime)
 							}
 						}
 					}
@@ -238,24 +247,32 @@
 			changeShaneType() {
 				this.sType = this.sType == "floating" ? "fadeUpOut" : "floating";
 			},
-			test() {
+			test(type) {
 				var that = this;
-				let p = {
-					"name": "恒洁洁",
-					// "city":"上海",
-					// "danmu":"欢迎莅临恒洁2020年度经销商大会"
+				var p = {
+					"name": "恒洁洁"
 				}
-				let pos = that.loopPosition();
-				p['position'] = pos; //pos 'random';
+				if (type == 'blessing') {
+					p['city'] = "上海";
+					p['blessing'] = "欢迎莅临恒洁2020年度经销商大会";
+					p['position'] = 'random';
+					that.shaneType = 'danmu';
+					that.clearTime = 650000;
+					that.getContNumb = 1;
+				} else {
+					let pos = that.loopPosition();
+					p['position'] = pos; //pos 'random' '';
+				}
 				console.log(p)
 				that.listDelay.push(p);
+				var _delayTime = that.delayTime; // that.delayTime; 10000
 				setTimeout(() => {
 					let _listDelay = that.listDelay;
 					var _listStorage = that.listStorage;
 					that.listStorage = [..._listStorage, ..._listDelay];
 					that.listDelay = [];
 					that.setListStorage();
-				}, 25000)
+				}, _delayTime)
 				// setTimeout(() => {
 				// 	that.setList();
 				// }, 10000)

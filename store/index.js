@@ -27,7 +27,8 @@ const store = new Vuex.Store({
 	actions: {
 		getData(ctx, parm) {
 			let _parm = parm.parm || '';
-			let _url = ctx.state.interface.ajUrl + ctx.state.interface.addr[parm.inter] + _parm
+			let intUrl = parm.intUrl || 'ajUrl';
+			let _url = ctx.state.interface[intUrl] + ctx.state.interface.addr[parm.inter] + _parm
 			console.log("getData-url-", parm.inter, "：", _url)
 			console.log("getData-parm-", parm.inter, "：", parm)
 			var result = [];
@@ -102,14 +103,31 @@ const store = new Vuex.Store({
 			});
 		},
 		sendSocketMessage(ctx, parm) {
+			uni.onSocketError(function(res) {
+				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				console.log('WebSocket连接打开失败，请检查！');
+			});
 			if (ctx.state.socketOpen) {
-				if (parm.fun) {
-					new parm.fun()
+				var res = {
+					"result": "",
+					"type": "socket"
 				}
 				uni.sendSocketMessage({
-					data: parm.msg
+					data: parm.msg,
+					success() {
+						res["result"] = 1;
+					},
+					fail() {
+						res["result"] = 0;
+					},
+					complete() {
+						if (parm.fun) {
+							new parm.fun(res)
+						}
+					}
 				});
 			} else {
+				ctx.state.socketErr = "同步连接异常，请刷新页面...";
 				console.log("服务器链接异常")
 			}
 		},
