@@ -8,7 +8,7 @@
 					</block>
 					<cover-view class="typeBox screen-type-box">
 						<view class="typeBtn screen-tst socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
-						<view class="typeBtn screen-tst" v-if="!false" @click="test">测试</view>
+						<view class="typeBtn screen-tst" v-if="false" @click="test">测试</view>
 					</cover-view>
 				</video>
 			</block>
@@ -120,7 +120,7 @@
 								"position": pos //pos 'random';
 							}
 						} else {
-							var bles = _data.split(',');
+							var bles = _data.split('[|]');
 							if (bles && bles[0] == 'blessing') {
 								p = {
 									"name": bles[1],
