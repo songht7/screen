@@ -44,7 +44,7 @@
 				loop: true,
 				muted: true,
 				video: "/static/video.mp4",
-				videoType: "video", //vide:签到视频 blessing：寄语视频
+				videoType: "video", //video:签到视频 blessing：寄语视频
 				bubble: "./static/bubble.svg",
 				bgIs: "video", //背景video img
 				shaneType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
