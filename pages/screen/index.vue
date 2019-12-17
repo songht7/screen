@@ -115,6 +115,10 @@
 						var pos = that.loopPosition();
 						var p = {};
 						if (vType == 'video') {
+							var bles = _data.split('[|]');
+							if (bles && bles[0] == 'blessing') {
+								return
+							}
 							p = {
 								"name": res.data,
 								"position": pos //pos 'random';
