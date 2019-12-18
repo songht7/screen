@@ -77,7 +77,7 @@
 				that.fixedPosition = 8;
 				that.getContNumb = 1;
 				that.clearTime = 18000;
-				that.animationCount = "4";
+				that.animationCount = "2";
 			}
 			that.switchBtn = btn;
 			if (btn) {
@@ -126,6 +126,9 @@
 					console.log(res)
 					if (res.data != 'space_close') {
 						var _data = res.data;
+						if (_data == '') {
+							return
+						}
 						var vType = that.videoType;
 						var pos = that.loopPosition();
 						var p = {};
