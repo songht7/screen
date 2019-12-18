@@ -4,7 +4,7 @@
 			<block v-if="bgIs=='video'">
 				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="'/static/'+videoType+'.mp4'">
 					<block v-for="(obj,k) in list" :key="k">
-						<cView :list="obj" :ckey="k" :bubble="bubble" :shaneType="shaneType" :txtType="txtType"></cView>
+						<cView :list="obj" :ckey="k" :bubble="bubble" :animationCount="animationCount" :shaneType="shaneType" :txtType="txtType"></cView>
 					</block>
 					<cover-view class="typeBox screen-type-box">
 						<view class="typeBtn screen-tst socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
@@ -49,6 +49,7 @@
 				bgIs: "video", //背景video img
 				shaneType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
+				animationCount: "6", //闪耀次数
 				list: [],
 				listStorage: [], //list 存储
 				listDelay: [], //延时存储
@@ -73,6 +74,7 @@
 				that.fixedPosition = 8;
 				that.getContNumb = 1;
 				that.clearTime = 18000;
+				that.animationCount = "4";
 			}
 			that.switchBtn = btn;
 			if (btn) {
