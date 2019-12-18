@@ -79,7 +79,7 @@ const store = new Vuex.Store({
 					ctx.state.socketOpen = true;
 				},
 				fail(err) {
-					ctx.state.socketErr = "同步连接异常，请刷新页面...";
+					ctx.state.socketErr = "同步连接异常，点击连接...";
 					console.log("connectSocket-fail：", err)
 					result = {
 						"success": false,
@@ -92,7 +92,7 @@ const store = new Vuex.Store({
 		onSocketMessage(ctx, parm) {
 			console.log(parm)
 			uni.onSocketError(function(res) {
-				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				ctx.state.socketErr = "同步连接异常，点击连接...";
 				ctx.dispatch("connectSocket");
 				console.log('WebSocket连接打开失败，请检查！');
 			});
@@ -105,7 +105,7 @@ const store = new Vuex.Store({
 		},
 		sendSocketMessage(ctx, parm) {
 			uni.onSocketError(function(res) {
-				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				ctx.state.socketErr = "同步连接异常，点击连接...";
 				ctx.dispatch("connectSocket");
 				console.log('WebSocket连接打开失败，请检查！');
 			});
@@ -129,7 +129,7 @@ const store = new Vuex.Store({
 					}
 				});
 			} else {
-				ctx.state.socketErr = "同步连接异常，请刷新页面...";
+				ctx.state.socketErr = "同步连接异常，点击连接...";
 				console.log("服务器链接异常")
 			}
 		},
