@@ -75,7 +75,7 @@
 			that.videoKey = _videoType;
 			if (_videoType == '1576684357') {
 				that.fixedPosition = 8;
-				that.getContNumb = 1;
+				that.getContNumb = 3;
 				that.clearTime = 18000;
 				that.animationCount = "2";
 			}
@@ -96,22 +96,21 @@
 			that.shakeSwitch('activityCheck');
 			that.getList();
 			setInterval(() => {
+				that.sendSocketMessage('heart')
+			}, 50000);
+			setInterval(() => {
 				that.setList();
 			}, 5000); //20000
 		},
 		onHide() {
 			var that = this;
-			var _getDataType = that.getDataType;
-			if (_getDataType == 'socket') {
-				that.sendSocketMessage('space_close')
-			}
+			//var _getDataType = that.getDataType;
+			that.sendSocketMessage('space_close')
 		},
 		onUnload() {
 			var that = this;
-			var _getDataType = that.getDataType;
-			if (_getDataType == 'socket') {
-				that.sendSocketMessage('space_close')
-			}
+			//var _getDataType = that.getDataType;
+			that.sendSocketMessage('space_close')
 		},
 		components: {
 			cView
@@ -261,10 +260,10 @@
 					"msg": val
 				};
 				_data["fun"] = function() {
-					setTimeout(() => {
-						that.up = false;
-						that.paused = "paused";
-					}, 3000)
+					// setTimeout(() => {
+					// 	that.up = false;
+					// 	that.paused = "paused";
+					// }, 3000)
 				}
 				console.log(_data);
 				that.$store.dispatch("sendSocketMessage", _data)
