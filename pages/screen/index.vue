@@ -2,7 +2,7 @@
 	<view class="content" :style="{'background-image':bgIs=='img'?'url(../../static/bg-scren.jpg)':'none'}">
 		<block v-if="!switchBtn">
 			<block v-if="bgIs=='video'">
-				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="'/static/'+videoType+'.mp4'">
+				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="videoUrl+videoType+'.mp4'">
 					<block v-for="(obj,k) in list" :key="k">
 						<cView :list="obj" :ckey="k" :bubble="bubble" :animationCount="animationCount" :shaneType="shaneType" :txtType="txtType"></cView>
 					</block>
@@ -43,8 +43,8 @@
 				autoplay: true,
 				loop: true,
 				muted: true,
-				video: "/static/video.mp4",
-				videoType: "video", //video:签到视频 blessing：寄语视频
+				videoUrl: "http://plbs-test-1257286922.cos.ap-shanghai.myqcloud.com/data/media_doc/",
+				videoType: "video", //video:签到视频 1576684104 blessing：寄语视频 1576684357
 				bubble: "./static/bubble.svg",
 				bgIs: "video", //背景video img
 				shaneType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
@@ -68,7 +68,7 @@
 		onLoad(option) {
 			var that = this;
 			let btn = option.btn ? true : false;
-			let _videoType = option.type ? option.type : "video";
+			let _videoType = option.type ? '1576684357' : "1576684104";
 			that.videoType = _videoType;
 			if (_videoType == 'blessing') {
 				that.fixedPosition = 8;
