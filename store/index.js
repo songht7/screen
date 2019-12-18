@@ -70,7 +70,7 @@ const store = new Vuex.Store({
 					return {};
 				},
 				header: {
-					'content-type': 'application/json;charset=utf-8'
+					'content-type': 'text/html;charset=utf-8'
 				},
 				method: 'GET',
 				success(res) {

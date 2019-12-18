@@ -2,7 +2,7 @@
 	<view class="content" :style="{'background-image':bgIs=='img'?'url(../../static/bg-scren.jpg)':'none'}">
 		<block v-if="!switchBtn">
 			<block v-if="bgIs=='video'">
-				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="videoUrl+videoType+'.mp4'">
+				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="videoUrl+videoKey+'.mp4'">
 					<block v-for="(obj,k) in list" :key="k">
 						<cView :list="obj" :ckey="k" :bubble="bubble" :animationCount="animationCount" :shaneType="shaneType" :txtType="txtType"></cView>
 					</block>
@@ -44,6 +44,7 @@
 				loop: true,
 				muted: true,
 				videoUrl: "http://plbs-test-1257286922.cos.ap-shanghai.myqcloud.com/data/media_doc/",
+				videoKey: "1576684104",
 				videoType: "video", //video:签到视频 1576684104 blessing：寄语视频 1576684357
 				bubble: "./static/bubble.svg",
 				bgIs: "video", //背景video img
@@ -62,15 +63,17 @@
 				switchBtn: false,
 				delayTime: 25000, //延迟显示时间
 				clearTime: 25000, //清除list时间
-				clearState: true //是否清除list
+				clearState: true, //是否清除list
+				getDataType: 'api' //接受、发送数据方式api，socket
 			}
 		},
 		onLoad(option) {
 			var that = this;
 			let btn = option.btn ? true : false;
 			let _videoType = option.type ? '1576684357' : "1576684104";
-			that.videoType = _videoType;
-			if (_videoType == 'blessing') {
+			that.videoType = _videoType == '1576684104' ? 'video' : 'blessing';
+			that.videoKey = _videoType;
+			if (_videoType == '1576684357') {
 				that.fixedPosition = 8;
 				that.getContNumb = 1;
 				that.clearTime = 18000;
@@ -84,7 +87,8 @@
 		},
 		onShow() {
 			var that = this;
-			this.$store.dispatch("connectSocket")
+			var _getDataType = that.getDataType;
+			that.$store.dispatch("connectSocket")
 			uni.onSocketOpen(function(res) {
 				console.log('WebSocket连接已打开！');
 				that.$store.state.socketErr = "";
@@ -96,10 +100,18 @@
 			}, 5000); //20000
 		},
 		onHide() {
-			this.sendSocketMessage('space_close')
+			var that = this;
+			var _getDataType = that.getDataType;
+			if (_getDataType == 'socket') {
+				that.sendSocketMessage('space_close')
+			}
 		},
 		onUnload() {
-			this.sendSocketMessage('space_close')
+			var that = this;
+			var _getDataType = that.getDataType;
+			if (_getDataType == 'socket') {
+				that.sendSocketMessage('space_close')
+			}
 		},
 		components: {
 			cView
@@ -108,6 +120,7 @@
 		methods: {
 			getList() {
 				var that = this;
+				var _getDataType = that.getDataType;
 				var _data = {};
 				_data["fun"] = function(res) {
 					console.log(res)
@@ -118,12 +131,18 @@
 						var p = {};
 						if (vType == 'video') {
 							var bles = _data.split('[|]');
-							if (bles && bles[0] == 'blessing') {
-								return
-							}
-							p = {
-								"name": res.data,
-								"position": pos //pos 'random';
+							if (bles && bles[0] == 'sign') {
+								if (_getDataType == 'socket') {
+									p = {
+										"name": res.data,
+										"position": pos //pos 'random';
+									}
+								} else {
+									p = {
+										"name": bles[1],
+										"position": pos //pos 'random';
+									}
+								}
 							}
 						} else {
 							var bles = _data.split('[|]');
@@ -266,8 +285,9 @@
 			loopPosition() {
 				var that = this;
 				let _rPosition = that.$store.state.rPosition;
+				let _fixedPosition = that.fixedPosition;
 				let _random = _rPosition + 1;
-				if (_random > that.fixedPosition) {
+				if (_random > _fixedPosition) {
 					_random = 0
 				}
 				that.$store.state.rPosition = _random;
