@@ -68,6 +68,7 @@
 				clearState: true, //是否清除list
 				setListTime: 5000, //每N秒设置list
 				ckListStorage: 0, //计时检测是否获取到数据
+				countDelay: 0, //计时检测是否获取到数据
 				getDataType: 'api' //接受、发送数据方式api，socket
 			}
 		},
@@ -179,6 +180,9 @@
 								that.listDelay = [];
 								//that.listStorage.push(p);
 								that.setListStorage();
+								if (vType == 'blessing') {
+									that.delayTime = 1;
+								}
 							}, _delayTime)
 						}
 					}
@@ -268,6 +272,14 @@
 			},
 			checkListStorage(data) {
 				var that = this;
+				that.countDelay += 2;
+				console.log(that.countDelay)
+				if (that.countDelay >= 60) {
+					that.delayTime = 8000;
+					setTimeout(() => {
+						that.list = [];
+					}, 8000)
+				}
 				if (data.length <= 0) {
 					that.ckListStorage += 2;
 					if (that.ckListStorage >= 12) {
