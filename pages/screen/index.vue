@@ -64,6 +64,7 @@
 				delayTime: 25000, //延迟显示时间
 				clearTime: 25000, //清除list时间
 				clearState: true, //是否清除list
+				setListTime: 5000, //每N秒设置list
 				getDataType: 'api' //接受、发送数据方式api，socket
 			}
 		},
@@ -76,7 +77,8 @@
 			if (_videoType == '1576684357') {
 				that.fixedPosition = 8;
 				that.getContNumb = 3;
-				that.clearTime = 18000;
+				that.clearTime = 19000;
+				that.setListTime = 2000;
 				that.animationCount = "2";
 			}
 			that.switchBtn = btn;
@@ -88,6 +90,7 @@
 		onShow() {
 			var that = this;
 			var _getDataType = that.getDataType;
+			var _setListTime = that.setListTime;
 			that.$store.dispatch("connectSocket")
 			uni.onSocketOpen(function(res) {
 				console.log('WebSocket连接已打开！');
@@ -100,7 +103,7 @@
 			}, 50000);
 			setInterval(() => {
 				that.setList();
-			}, 5000); //20000
+			}, _setListTime); //20000
 		},
 		onHide() {
 			var that = this;
