@@ -46,6 +46,10 @@
 			animationCount: { //floating:infinite / 6, fadeUpOut:1
 				type: String,
 				default: "6"
+			},
+			duration: { //animation-duration 3s/2s
+				type: String,
+				default: "3s"
 			}
 		},
 		data() {
@@ -134,38 +138,47 @@
 				dmPosition: [{
 					"left": '2%',
 					"bottom": "55%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '16%',
 					"bottom": "23%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '18%',
 					"bottom": "75%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '35%',
 					"bottom": "70%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '52%',
 					"bottom": "75%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '68%',
 					"bottom": "55%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '32%',
 					"bottom": "30%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '50%',
 					"bottom": "25%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
-				},{
+				}, {
 					"left": '20%',
 					"bottom": "50%",
+					"animation-duration": this.duration,
 					"animation-iteration-count": this.animationCount
 				}]
 			};
@@ -205,7 +218,8 @@
 		width: 250px;
 		height: auto;
 	}
-	uni-cover-view.coverView-danmu{
+
+	uni-cover-view.coverView-danmu {
 		white-space: pre-wrap;
 		word-break: break-all;
 	}
@@ -334,8 +348,9 @@
 		align-content: center;
 		align-items: center;
 	}
-	.coverView-danmu .cover-name{
-		justify-content:flex-start;
+
+	.coverView-danmu .cover-name {
+		justify-content: flex-start;
 		font-size: 8upx;
 	}
 

@@ -4,7 +4,8 @@
 			<block v-if="bgIs=='video'">
 				<video class="video" id="MeetVideo" :autoplay="autoplay" :loop="loop" :muted="muted" :src="videoUrl+videoKey+'.mp4'">
 					<block v-for="(obj,k) in list" :key="k">
-						<cView :list="obj" :ckey="k" :bubble="bubble" :animationCount="animationCount" :shaneType="shaneType" :txtType="txtType"></cView>
+						<cView :list="obj" :ckey="k" :bubble="bubble" :duration="animationDuration" :animationCount="animationCount"
+						 :shaneType="shaneType" :txtType="txtType"></cView>
 					</block>
 					<cover-view class="typeBox screen-type-box">
 						<view class="typeBtn screen-tst socketErr" v-if="$store.state.socketErr" @click="$store.dispatch('connectSocket')">{{$store.state.socketErr}}</view>
@@ -51,6 +52,7 @@
 				shaneType: "floating", //fadeUpOut 上浮 floating 固定闪耀 danmu 右到左
 				txtType: "textFlash", //gradual 渐变 textFlash 发光
 				animationCount: "6", //闪耀次数
+				animationDuration: "3s", //闪耀时间
 				list: [],
 				listStorage: [], //list 存储
 				listDelay: [], //延时存储
@@ -76,10 +78,12 @@
 			that.videoKey = _videoType;
 			if (_videoType == '1576684357') {
 				that.fixedPosition = 8;
-				that.getContNumb = 3;
-				that.clearTime = 19000;
-				that.setListTime = 2000;
-				that.animationCount = "2";
+				//that.getContNumb = 3;
+				that.clearTime = 30000;
+				that.setListTime = 3000;
+				that.delayTime = 2000;
+				that.animationCount = "4";
+				that.animationDuration = "2s";
 			}
 			that.switchBtn = btn;
 			if (btn) {
@@ -151,7 +155,7 @@
 							}
 						} else {
 							var bles = _data.split('[|]');
-							if (bles && bles[0] == 'blessing') {
+							if (bles && bles[0] == 'blessing' && bles[1]) {
 								p = {
 									"name": bles[1],
 									"city": bles[2],
