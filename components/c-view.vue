@@ -1,6 +1,6 @@
 <template>
 	<!-- shine>50?'shine big':'', -->
-	<cover-view :class="['coverView',shaneType,'c-'+ckey,list.danmu?'coverView-danmu':'']" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:(list.danmu?dmPosition[list.position]:signPosition[list.position])):{'left':randomLeft,'bottom':randomBottom}">
+	<cover-view :class="['coverView',shaneType,'c-'+ckey,list.danmu?'coverView-danmu':'']" :data-pos="list.position?list.position:''" :style="shaneType=='floating'?(list.position=='random'?{'left':randomLeft,'bottom':randomBottom}:(list.danmu?dmPosition[list.position]:signPosition[list.position])):{'left':randomLeft,'bottom':randomBottom}">
 		<view class="cover-block">
 			<img :src="bubble" class="bubble" v-if="bubbleShow" />
 			<view :class="['cover-name',txtType]">

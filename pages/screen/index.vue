@@ -67,6 +67,7 @@
 				clearTime: 25000, //清除list时间
 				clearState: true, //是否清除list
 				setListTime: 5000, //每N秒设置list
+				ckListStorage: 0, //计时检测是否获取到数据
 				getDataType: 'api' //接受、发送数据方式api，socket
 			}
 		},
@@ -78,10 +79,11 @@
 			that.videoKey = _videoType;
 			if (_videoType == '1576684357') {
 				that.fixedPosition = 8;
-				//that.getContNumb = 3;
-				that.clearTime = 30000;
-				that.setListTime = 3000;
-				that.delayTime = 2000;
+				that.getContNumb = 4;
+				that.clearTime = 50000;
+				that.setListTime = 2000;
+				that.delayTime = 1;
+				that.clearState = false;
 				that.animationCount = "4";
 				that.animationDuration = "2s";
 			}
@@ -136,11 +138,11 @@
 							return
 						}
 						var vType = that.videoType;
-						var pos = that.loopPosition();
 						var p = {};
 						if (vType == 'video') {
 							var bles = _data.split('[|]');
 							if (bles && bles[0] == 'sign') {
+								var pos = that.loopPosition();
 								if (_getDataType == 'socket') {
 									p = {
 										"name": res.data,
@@ -155,7 +157,8 @@
 							}
 						} else {
 							var bles = _data.split('[|]');
-							if (bles && bles[0] == 'blessing' && bles[1]) {
+							if (bles && bles[0] == 'blessing') {
+								var pos = that.loopPosition();
 								p = {
 									"name": bles[1],
 									"city": bles[2],
@@ -166,16 +169,18 @@
 								//that.shaneType = 'danmu';
 							}
 						}
-						that.listDelay.push(p)
-						var _delayTime = that.delayTime;
-						setTimeout(() => {
-							let _listDelay = that.listDelay;
-							var _listStorage = that.listStorage;
-							that.listStorage = [..._listStorage, ..._listDelay];
-							that.listDelay = [];
-							//that.listStorage.push(p);
-							that.setListStorage();
-						}, _delayTime)
+						if (p.name) {
+							that.listDelay.push(p)
+							var _delayTime = that.delayTime;
+							setTimeout(() => {
+								let _listDelay = that.listDelay;
+								var _listStorage = that.listStorage;
+								that.listStorage = [..._listStorage, ..._listDelay];
+								that.listDelay = [];
+								//that.listStorage.push(p);
+								that.setListStorage();
+							}, _delayTime)
+						}
 					}
 				}
 				that.$store.dispatch("onSocketMessage", _data)
@@ -200,6 +205,7 @@
 			setPageList(_listStorag) {
 				var that = this;
 				console.log("getList-listStorage:", _listStorag);
+				that.checkListStorage(_listStorag);
 				if (_listStorag.length) {
 					var _fixedPosition = that.fixedPosition;
 					var _getContNumb = that.getContNumb;
@@ -212,7 +218,8 @@
 					that.setListStorage();
 					// console.log("leftover：", that.listStorage)
 					// console.log("list：", that.list)
-					if (that.list.length > _fixedPosition) {
+					if (that.list.length >= _fixedPosition * 2) {
+						//that.clearList('1')
 						if (!that.clearLi) {
 							that.clearLi = true;
 						}
@@ -242,10 +249,10 @@
 				var that = this;
 				if (that.clearState) {
 					let _list = that.list;
+					that.clearLi = false;
 					that.list = _list.filter((obj, k) => k > that.getContNumb);
 					console.log("clearList, list:", that.list)
 				}
-				that.clearLi = false;
 			},
 			setListStorage() {
 				var that = this;
@@ -258,6 +265,21 @@
 						//console.log('success');
 					}
 				});
+			},
+			checkListStorage(data) {
+				var that = this;
+				if (data.length <= 0) {
+					that.ckListStorage += 2;
+					if (that.ckListStorage >= 12) {
+						that.list = [];
+						that.ckListStorage = 0;
+						//console.log("ckl-1:", that.list)
+					}
+				} else {
+					that.ckListStorage = 0;
+					//console.log("ckl-2")
+				}
+				//console.log(that.ckListStorage)
 			},
 			sendSocketMessage(val) {
 				var that = this;
