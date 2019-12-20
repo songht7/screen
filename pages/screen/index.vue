@@ -274,11 +274,12 @@
 				var that = this;
 				that.countDelay += 2;
 				console.log(that.countDelay)
-				if (that.countDelay >= 60) {
-					that.delayTime = 8000;
+				if (that.countDelay >= 200) {
+					that.countDelay = 0;
 					setTimeout(() => {
 						that.list = [];
 					}, 8000)
+					that.delayTime = 9000;
 				}
 				if (data.length <= 0) {
 					that.ckListStorage += 2;
